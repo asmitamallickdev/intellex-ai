@@ -1,4 +1,4 @@
-export const modalCategories = [
+﻿export const modalCategories = [
   "Engineering",
   "Software Development",
   "Artificial Intelligence",

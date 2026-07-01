@@ -51,7 +51,7 @@ const getFileIconInfo = (ext: string) => {
   if (["json", "js", "ts", "md"].includes(e)) {
     return {
       icon: FileCode,
-      colors: "bg-violet-500/10 text-violet-650 dark:text-violet-400 border border-violet-500/15",
+      colors: "bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/15",
     };
   }
   if (["png", "jpg", "jpeg", "webp", "gif"].includes(e)) {
@@ -62,7 +62,7 @@ const getFileIconInfo = (ext: string) => {
   }
   return {
     icon: FileArchive,
-    colors: "bg-zinc-100 dark:bg-zinc-800 text-zinc-650 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-700/50",
+    colors: "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700/50",
   };
 };
 
@@ -73,20 +73,20 @@ export default function UploadedFilesTable({
   onPreview,
 }: UploadedFilesTableProps) {
   return (
-    <div className="rounded-xl border border-zinc-200 dark:border-zinc-900 bg-white dark:bg-zinc-900/10 backdrop-blur-sm p-5 md:p-6 space-y-4">
+    <div className="rounded-xl border border-gray-200 dark:border-gray-900 bg-white dark:bg-gray-900/10 backdrop-blur-sm p-5 md:p-6 space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="space-y-0.5">
-          <h3 className="text-sm font-semibold text-zinc-800 dark:text-zinc-100 tracking-tight">
+          <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-100 tracking-tight">
             Recently Uploaded
           </h3>
-          <p className="text-[11px] text-zinc-500 font-medium">
+          <p className="text-[11px] text-gray-600 dark:text-gray-500 dark:text-gray-400 font-medium">
             Manage your index and RAG document library
           </p>
         </div>
         <button
           onClick={() => onPreview("All History")}
-          className="flex items-center text-xs font-semibold text-violet-650 dark:text-violet-400 hover:text-violet-755 dark:hover:text-violet-300 transition-colors group/view cursor-pointer"
+          className="flex items-center text-xs font-semibold text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 transition-colors group/view cursor-pointer"
         >
           View All History
           <ArrowUpRight className="w-3.5 h-3.5 ml-0.5 group-hover/view:translate-x-0.5 group-hover/view:-translate-y-0.5 transition-transform duration-200" />
@@ -97,14 +97,14 @@ export default function UploadedFilesTable({
       <div className="overflow-x-auto select-none">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="border-b border-zinc-200 dark:border-zinc-900/80 text-[10px] font-bold text-zinc-550 dark:text-zinc-500 uppercase tracking-wider h-8">
+            <tr className="border-b border-gray-200 dark:border-gray-900/80 text-[10px] font-bold text-gray-500 dark:text-gray-500 dark:text-gray-400 uppercase tracking-wider h-8">
               <th className="pb-2 font-bold pl-1">Filename</th>
               <th className="pb-2 font-bold hidden sm:table-cell">Size</th>
               <th className="pb-2 font-bold">Status</th>
               <th className="pb-2 font-bold text-right pr-2">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-zinc-100 dark:divide-zinc-900/40">
+          <tbody className="divide-y divide-gray-100 dark:divide-gray-900/40">
             {files.map((file, idx) => {
               const { icon: Icon, colors: iconColors } = getFileIconInfo(file.type);
               const isUploading = file.status === "Processing" || file.status === "Embedding";
@@ -115,7 +115,7 @@ export default function UploadedFilesTable({
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, delay: idx * 0.04 }}
-                  className="group hover:bg-zinc-50/50 dark:hover:bg-zinc-900/10 transition-colors duration-200"
+                  className="group hover:bg-gray-50/50 dark:hover:bg-gray-900/10 transition-colors duration-200"
                 >
                   {/* Filename with type icon & meta details */}
                   <td className="py-3 pl-1 min-w-[200px]">
@@ -128,19 +128,19 @@ export default function UploadedFilesTable({
                       </div>
 
                       <div className="min-w-0 space-y-0.5">
-                        <span className="text-xs font-semibold text-zinc-850 dark:text-zinc-200 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors duration-150 truncate block max-w-[250px] sm:max-w-sm md:max-w-md">
+                        <span className="text-xs font-semibold text-gray-800 dark:text-gray-200 group-hover:text-gray-950 dark:group-hover:text-white transition-colors duration-150 truncate block max-w-[250px] sm:max-w-sm md:max-w-md">
                           {file.filename}
                         </span>
                         
                         {/* Meta text row */}
-                        <div className="flex items-center text-[10px] text-zinc-500 font-medium">
+                        <div className="flex items-center text-[10px] text-gray-600 dark:text-gray-500 dark:text-gray-400 font-medium">
                           <span className="flex items-center">
-                            <User className="w-2.5 h-2.5 mr-0.8 text-zinc-450 dark:text-zinc-650" />
+                            <User className="w-2.5 h-2.5 mr-0.8 text-gray-400 dark:text-gray-600" />
                             {file.owner}
                           </span>
-                          <span className="mx-1.5 text-zinc-350 dark:text-zinc-800">•</span>
+                          <span className="mx-1.5 text-gray-300 dark:text-gray-800">�</span>
                           <span className="flex items-center">
-                            <Calendar className="w-2.5 h-2.5 mr-0.8 text-zinc-450 dark:text-zinc-650" />
+                            <Calendar className="w-2.5 h-2.5 mr-0.8 text-gray-400 dark:text-gray-600" />
                             {file.uploadedAt}
                           </span>
                         </div>
@@ -149,7 +149,7 @@ export default function UploadedFilesTable({
                   </td>
 
                   {/* File Size */}
-                  <td className="py-3 text-xs font-medium text-zinc-550 dark:text-zinc-400 hidden sm:table-cell">
+                  <td className="py-3 text-xs font-medium text-gray-500 dark:text-gray-500 dark:text-gray-400 hidden sm:table-cell">
                     {file.size}
                   </td>
 
@@ -162,14 +162,14 @@ export default function UploadedFilesTable({
                       {/* Simulative upload / embed progress indicator */}
                       {isUploading && (
                         <div className="space-y-1">
-                          <div className="relative h-1 w-full bg-zinc-100 dark:bg-zinc-955 rounded-full overflow-hidden border border-zinc-200 dark:border-zinc-900">
+                          <div className="relative h-1 w-full bg-gray-100 dark:bg-gray-950 rounded-full overflow-hidden border border-gray-200 dark:border-gray-900">
                             <motion.div
                               animate={{ width: `${file.progress}%` }}
                               transition={{ duration: 0.3 }}
-                              className="h-full bg-gradient-to-r from-violet-600 to-fuchsia-500 rounded-full"
+                              className="h-full bg-gradient-to-r from-orange-600 to-amber-500 rounded-full"
                             />
                           </div>
-                          <span className="text-[9px] text-zinc-500 font-semibold uppercase tracking-wider block">
+                          <span className="text-[9px] text-gray-600 dark:text-gray-500 dark:text-gray-400 font-semibold uppercase tracking-wider block">
                             {file.progress}% Completed
                           </span>
                         </div>
@@ -177,8 +177,8 @@ export default function UploadedFilesTable({
 
                       {/* Completed indicator */}
                       {file.status === "Completed" && (
-                        <div className="h-1 w-full bg-violet-600/30 rounded-full overflow-hidden">
-                          <div className="h-full w-full bg-violet-500" />
+                        <div className="h-1 w-full bg-orange-600/30 rounded-full overflow-hidden">
+                          <div className="h-full w-full bg-orange-500" />
                         </div>
                       )}
                     </div>
@@ -190,7 +190,7 @@ export default function UploadedFilesTable({
                       {/* Quick action: Preview */}
                       <button
                         onClick={() => onPreview(file.filename)}
-                        className="p-1 rounded-lg text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-350 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors cursor-pointer hidden sm:inline-block"
+                        className="p-1 rounded-lg text-gray-600 dark:text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors cursor-pointer hidden sm:inline-block"
                         title="Preview file content"
                       >
                         <Eye className="w-3.5 h-3.5" />
@@ -199,7 +199,7 @@ export default function UploadedFilesTable({
                       {/* Quick action: Download */}
                       <button
                         onClick={() => onDownload(file.filename)}
-                        className="p-1 rounded-lg text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-350 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors cursor-pointer hidden sm:inline-block"
+                        className="p-1 rounded-lg text-gray-600 dark:text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors cursor-pointer hidden sm:inline-block"
                         title="Download file"
                       >
                         <Download className="w-3.5 h-3.5" />
@@ -232,8 +232,8 @@ export default function UploadedFilesTable({
         {/* Empty search results fallback */}
         {files.length === 0 && (
           <div className="text-center py-10 space-y-2">
-            <p className="text-xs text-zinc-650 dark:text-zinc-400 font-semibold">No files found matching search filters.</p>
-            <p className="text-[10px] text-zinc-450 dark:text-zinc-650 font-medium">Try checking search input text or changing filter tabs.</p>
+            <p className="text-xs text-gray-600 dark:text-gray-500 dark:text-gray-400 font-semibold">No files found matching search filters.</p>
+            <p className="text-[10px] text-gray-400 dark:text-gray-600 font-medium">Try checking search input text or changing filter tabs.</p>
           </div>
         )}
       </div>

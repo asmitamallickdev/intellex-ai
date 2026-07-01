@@ -28,7 +28,7 @@ const colorMap: Record<string, { bg: string; text: string; border: string; borde
   orange: { bg: "bg-orange-500/10", text: "text-orange-400", border: "border-orange-500/10", borderHover: "hover:border-orange-500/30", glow: "rgba(249,115,22,0.03)", textDark: "text-orange-300" },
   red: { bg: "bg-red-500/10", text: "text-red-400", border: "border-red-500/10", borderHover: "hover:border-red-500/30", glow: "rgba(239,68,68,0.03)", textDark: "text-red-300" },
   pink: { bg: "bg-pink-500/10", text: "text-pink-400", border: "border-pink-500/10", borderHover: "hover:border-pink-500/30", glow: "rgba(236,72,153,0.03)", textDark: "text-pink-300" },
-  zinc: { bg: "bg-zinc-500/10", text: "text-zinc-400", border: "border-zinc-500/10", borderHover: "hover:border-zinc-500/30", glow: "rgba(113,113,122,0.03)", textDark: "text-zinc-300" },
+  zinc: { bg: "bg-gray-500/10", text: "text-gray-400", border: "border-gray-500/10", borderHover: "hover:border-gray-500/30", glow: "rgba(113,113,122,0.03)", textDark: "text-gray-300" },
 };
 
 export default function SkillCard({
@@ -94,7 +94,7 @@ export default function SkillCard({
           y: -4, 
         }}
         className={cn(
-          "relative flex flex-col justify-between p-5 rounded-2xl border border-zinc-200 dark:border-zinc-900 bg-white dark:bg-zinc-950/20 backdrop-blur-sm transition-all duration-200 group shadow-sm dark:shadow-md hover:shadow-md dark:hover:shadow-[0_12px_30px_rgba(0,0,0,0.3)]",
+          "relative flex flex-col justify-between p-5 rounded-2xl border border-gray-200 dark:border-gray-900 bg-white dark:bg-gray-950/20 backdrop-blur-sm transition-all duration-200 group shadow-sm dark:shadow-md hover:shadow-md dark:hover:shadow-[0_12px_30px_rgba(0,0,0,0.3)]",
           colorStyles.borderHover
         )}
         style={{
@@ -115,7 +115,7 @@ export default function SkillCard({
 
             {/* Pinned overlay badge */}
             {skill.isPinned && (
-              <Icons.Pin className="w-3.5 h-3.5 text-violet-650 dark:text-violet-400 rotate-45" />
+              <Icons.Pin className="w-3.5 h-3.5 text-orange-600 dark:text-orange-400 rotate-45" />
             )}
           </div>
 
@@ -123,7 +123,7 @@ export default function SkillCard({
           <div ref={menuRef} className="relative">
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="p-1.5 rounded-lg text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors border border-transparent hover:border-zinc-200 dark:hover:border-zinc-800 cursor-pointer"
+              className="p-1.5 rounded-lg text-gray-500 hover:text-gray-800 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors border border-transparent hover:border-gray-200 dark:hover:border-gray-800 cursor-pointer"
               aria-label="Actions menu"
             >
               <Icons.MoreHorizontal className="w-4.5 h-4.5" />
@@ -136,16 +136,16 @@ export default function SkillCard({
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95, y: 5 }}
                   transition={{ duration: 0.1 }}
-                  className="absolute right-0 mt-1 w-40 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-1 shadow-2xl z-30"
+                  className="absolute right-0 mt-1 w-40 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 p-1 shadow-2xl z-30"
                 >
                   <button
                     onClick={() => {
                       setMenuOpen(false);
                       // Custom workspace open behavior
                     }}
-                    className="flex items-center w-full h-8 px-2.5 rounded-md text-left text-[11px] text-zinc-650 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors cursor-pointer font-medium"
+                    className="flex items-center w-full h-8 px-2.5 rounded-md text-left text-[11px] text-gray-600 dark:text-gray-400 hover:text-gray-950 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors cursor-pointer font-medium"
                   >
-                    <Icons.ExternalLink className="w-3.5 h-3.5 mr-2 text-zinc-400 dark:text-zinc-500" />
+                    <Icons.ExternalLink className="w-3.5 h-3.5 mr-2 text-gray-400 dark:text-gray-500" />
                     Open Workspace
                   </button>
 
@@ -154,9 +154,9 @@ export default function SkillCard({
                       setIsRenaming(true);
                       setMenuOpen(false);
                     }}
-                    className="flex items-center w-full h-8 px-2.5 rounded-md text-left text-[11px] text-zinc-655 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors cursor-pointer font-medium"
+                    className="flex items-center w-full h-8 px-2.5 rounded-md text-left text-[11px] text-gray-600 dark:text-gray-400 hover:text-gray-950 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors cursor-pointer font-medium"
                   >
-                    <Icons.Edit className="w-3.5 h-3.5 mr-2 text-zinc-400 dark:text-zinc-500" />
+                    <Icons.Edit className="w-3.5 h-3.5 mr-2 text-gray-400 dark:text-gray-500" />
                     Rename
                   </button>
 
@@ -165,9 +165,9 @@ export default function SkillCard({
                       onDuplicate(skill.id);
                       setMenuOpen(false);
                     }}
-                    className="flex items-center w-full h-8 px-2.5 rounded-md text-left text-[11px] text-zinc-655 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors cursor-pointer font-medium"
+                    className="flex items-center w-full h-8 px-2.5 rounded-md text-left text-[11px] text-gray-600 dark:text-gray-400 hover:text-gray-950 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors cursor-pointer font-medium"
                   >
-                    <Icons.Copy className="w-3.5 h-3.5 mr-2 text-zinc-400 dark:text-zinc-500" />
+                    <Icons.Copy className="w-3.5 h-3.5 mr-2 text-gray-400 dark:text-gray-500" />
                     Duplicate
                   </button>
 
@@ -176,9 +176,9 @@ export default function SkillCard({
                       onPinToggle(skill.id);
                       setMenuOpen(false);
                     }}
-                    className="flex items-center w-full h-8 px-2.5 rounded-md text-left text-[11px] text-zinc-655 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors cursor-pointer font-medium"
+                    className="flex items-center w-full h-8 px-2.5 rounded-md text-left text-[11px] text-gray-600 dark:text-gray-400 hover:text-gray-950 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors cursor-pointer font-medium"
                   >
-                    <Icons.Pin className="w-3.5 h-3.5 mr-2 text-zinc-400 dark:text-zinc-500" />
+                    <Icons.Pin className="w-3.5 h-3.5 mr-2 text-gray-400 dark:text-gray-500" />
                     {skill.isPinned ? "Unpin" : "Pin"}
                   </button>
 
@@ -186,13 +186,13 @@ export default function SkillCard({
                     onClick={() => {
                       setMenuOpen(false);
                     }}
-                    className="flex items-center w-full h-8 px-2.5 rounded-md text-left text-[11px] text-zinc-655 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors cursor-pointer font-medium"
+                    className="flex items-center w-full h-8 px-2.5 rounded-md text-left text-[11px] text-gray-600 dark:text-gray-400 hover:text-gray-950 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors cursor-pointer font-medium"
                   >
-                    <Icons.Archive className="w-3.5 h-3.5 mr-2 text-zinc-400 dark:text-zinc-500" />
+                    <Icons.Archive className="w-3.5 h-3.5 mr-2 text-gray-400 dark:text-gray-500" />
                     Archive
                   </button>
 
-                  <div className="border-t border-zinc-100 dark:border-zinc-900 my-1 mx-1" />
+                  <div className="border-t border-gray-100 dark:border-gray-900 my-1 mx-1" />
 
                   <button
                     onClick={() => {
@@ -220,49 +220,49 @@ export default function SkillCard({
               onChange={(e) => setRenameValue(e.target.value)}
               onBlur={handleRenameSubmit}
               onKeyDown={handleKeyDown}
-              className="w-full text-sm font-semibold bg-zinc-50 dark:bg-zinc-900 border border-violet-500 px-2 py-0.5 rounded text-zinc-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-violet-500/50"
+              className="w-full text-sm font-semibold bg-gray-50 dark:bg-gray-900 border border-orange-500 px-2 py-0.5 rounded text-gray-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-orange-500/50"
             />
           ) : (
-            <h3 className="text-sm font-semibold text-zinc-850 dark:text-zinc-100 tracking-tight group-hover:text-zinc-950 dark:group-hover:text-white transition-colors duration-150 truncate">
+            <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-100 tracking-tight group-hover:text-gray-950 dark:group-hover:text-white transition-colors duration-150 truncate">
               {skill.name}
             </h3>
           )}
 
-          <p className="text-xs text-zinc-550 dark:text-zinc-400 leading-normal font-medium h-12 overflow-hidden line-clamp-3">
+          <p className="text-xs text-gray-500 dark:text-gray-400 leading-normal font-medium h-12 overflow-hidden line-clamp-3">
             {skill.description}
           </p>
         </div>
 
         {/* Stats Row Block */}
-        <div className="mt-5 pt-3 border-t border-zinc-100 dark:border-zinc-900/60 grid grid-cols-2 gap-y-2 gap-x-1 text-[11px] text-zinc-500 font-medium">
+        <div className="mt-5 pt-3 border-t border-gray-100 dark:border-gray-900/60 grid grid-cols-2 gap-y-2 gap-x-1 text-[11px] text-gray-500 font-medium">
           <div className="flex items-center space-x-1">
-            <Icons.FileText className="w-3.5 h-3.5 text-zinc-400 dark:text-zinc-600 flex-shrink-0" />
-            <span className="text-zinc-700 dark:text-zinc-400 font-semibold">{skill.documents}</span>
-            <span className="text-zinc-450 dark:text-zinc-600">Docs</span>
+            <Icons.FileText className="w-3.5 h-3.5 text-orange-500 dark:text-gray-600 flex-shrink-0" />
+            <span className="text-gray-700 dark:text-gray-400 font-semibold">{skill.documents}</span>
+            <span className="text-black dark:text-gray-600">Docs</span>
           </div>
 
           <div className="flex items-center space-x-1">
-            <Icons.MessageSquare className="w-3.5 h-3.5 text-zinc-400 dark:text-zinc-600 flex-shrink-0" />
-            <span className="text-zinc-700 dark:text-zinc-400 font-semibold">{skill.chats}</span>
-            <span className="text-zinc-450 dark:text-zinc-600">Chats</span>
+            <Icons.MessageSquare className="w-3.5 h-3.5 text-orange-500 dark:text-gray-600 flex-shrink-0" />
+            <span className="text-gray-700 dark:text-gray-400 font-semibold">{skill.chats}</span>
+            <span className="text-black dark:text-gray-600">Chats</span>
+          </div>
+
+          {/* <div className="flex items-center space-x-1">
+            <Icons.Brain className="w-3.5 h-3.5 text-gray-400 dark:text-gray-600 flex-shrink-0" />
+            <span className="text-gray-700 dark:text-gray-400 font-semibold">{skill.memories}</span>
+            <span className="text-black dark:text-gray-600">Nodes</span>
           </div>
 
           <div className="flex items-center space-x-1">
-            <Icons.Brain className="w-3.5 h-3.5 text-zinc-400 dark:text-zinc-600 flex-shrink-0" />
-            <span className="text-zinc-700 dark:text-zinc-400 font-semibold">{skill.memories}</span>
-            <span className="text-zinc-450 dark:text-zinc-600">Nodes</span>
-          </div>
-
-          <div className="flex items-center space-x-1">
-            <Icons.HardDrive className="w-3.5 h-3.5 text-zinc-400 dark:text-zinc-600 flex-shrink-0" />
-            <span className="text-zinc-700 dark:text-zinc-400 font-semibold">{skill.storage}</span>
-          </div>
+            <Icons.HardDrive className="w-3.5 h-3.5 text-gray-400 dark:text-gray-600 flex-shrink-0" />
+            <span className="text-gray-700 dark:text-gray-400 font-semibold">{skill.storage}</span>
+          </div> */}
         </div>
 
         {/* Footer Actions */}
         <div className="mt-5 flex items-center justify-between gap-3 pt-1 border-t border-transparent">
-          <span className="text-[10px] text-zinc-500 font-medium flex items-center">
-            <Icons.Calendar className="w-3 h-3 text-zinc-400 dark:text-zinc-600 mr-1 flex-shrink-0" />
+          <span className="text-[10px] text-gray-500 font-medium flex items-center">
+            <Icons.Calendar className="w-3 h-3 text-gray-400 dark:text-gray-600 mr-1 flex-shrink-0" />
             Upd: {skill.lastUpdated}
           </span>
 
@@ -275,8 +275,8 @@ export default function SkillCard({
               <Icons.Trash2 className="w-3.5 h-3.5" />
             </button>
             <button 
-              onClick={() => router.push(`/chats/${skill.id}`)}
-              className="flex items-center justify-center h-7 px-3.5 text-[10px] font-bold rounded-lg bg-zinc-50 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 hover:text-zinc-955 dark:hover:text-white border border-zinc-200 dark:border-zinc-800 hover:border-zinc-350 dark:hover:border-zinc-700 transition-all duration-200 cursor-pointer"
+              onClick={() => router.push(`/chat/${skill.id}`)}
+              className="flex items-center justify-center h-7 px-3.5 text-[10px] font-bold rounded-lg bg-gray-50 dark:bg-gray-900 text-gray-700 dark:text-gray-300 hover:text-gray-950 dark:hover:text-white border border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 transition-all duration-200 cursor-pointer"
             >
               Open Space
               <Icons.ArrowRight className="w-3 h-3 ml-1 transition-transform duration-200 group-hover:translate-x-0.5" />
@@ -294,7 +294,7 @@ export default function SkillCard({
     <motion.div
       whileHover={{ }}
       className={cn(
-        "flex flex-col md:flex-row items-start md:items-center justify-between p-4 rounded-xl border border-zinc-200 dark:border-zinc-900 bg-white dark:bg-zinc-955/20 backdrop-blur-sm transition-all duration-200 group gap-4 shadow-sm hover:shadow-md dark:hover:shadow-[0_6px_20px_rgba(0,0,0,0.2)]",
+        "flex flex-col md:flex-row items-start md:items-center justify-between p-4 rounded-xl border border-gray-200 dark:border-gray-900 bg-white dark:bg-gray-950/20 backdrop-blur-sm transition-all duration-200 group gap-4 shadow-sm hover:shadow-md dark:hover:shadow-[0_6px_20px_rgba(0,0,0,0.2)]",
         colorStyles.borderHover
       )}
       style={{
@@ -323,58 +323,58 @@ export default function SkillCard({
                 onChange={(e) => setRenameValue(e.target.value)}
                 onBlur={handleRenameSubmit}
                 onKeyDown={handleKeyDown}
-                className="text-xs font-semibold bg-zinc-50 dark:bg-zinc-900 border border-violet-500 px-2 py-0.5 rounded text-zinc-805 dark:text-white focus:outline-none focus:ring-1 focus:ring-violet-500/50"
+                className="text-xs font-semibold bg-gray-50 dark:bg-gray-900 border border-orange-500 px-2 py-0.5 rounded text-gray-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-orange-500/50"
               />
             ) : (
-              <h3 className="text-xs font-semibold text-zinc-850 dark:text-zinc-200 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors duration-150 truncate">
+              <h3 className="text-xs font-semibold text-gray-800 dark:text-gray-200 group-hover:text-gray-950 dark:group-hover:text-white transition-colors duration-150 truncate">
                 {skill.name}
               </h3>
             )}
             
             {skill.isPinned && (
-              <Icons.Pin className="w-3 h-3 text-violet-650 dark:text-violet-400 rotate-45 flex-shrink-0" />
+              <Icons.Pin className="w-3 h-3 text-orange-600 dark:text-orange-400 rotate-45 flex-shrink-0" />
             )}
-            <span className="text-[9px] font-bold px-1.5 py-0.2 bg-zinc-100 dark:bg-zinc-900 text-zinc-550 dark:text-zinc-500 rounded border border-zinc-200 dark:border-zinc-850 uppercase tracking-wide">
+            <span className="text-[9px] font-bold px-1.5 py-0.2 bg-gray-100 dark:bg-gray-900 text-gray-500 dark:text-gray-300 rounded border border-gray-200 dark:border-gray-800 uppercase tracking-wide">
               {skill.category}
             </span>
           </div>
 
-          <p className="text-[11px] text-zinc-550 dark:text-zinc-400 font-medium line-clamp-1 max-w-xl">
+          <p className="text-[11px] text-gray-500 dark:text-gray-400 font-medium line-clamp-1 max-w-xl">
             {skill.description}
           </p>
         </div>
       </div>
 
       {/* Stats Block (middle side) */}
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[10px] text-zinc-500 font-semibold tracking-wide uppercase flex-shrink-0">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[10px] text-gray-500 font-semibold tracking-wide uppercase flex-shrink-0">
         <div className="flex items-center space-x-1 min-w-[50px]">
-          <Icons.FileText className="w-3.5 h-3.5 text-zinc-400 dark:text-zinc-600 flex-shrink-0" />
-          <span className="text-zinc-700 dark:text-zinc-300">{skill.documents}</span>
+          <Icons.FileText className="w-3.5 h-3.5 text-gray-400 dark:text-gray-600 flex-shrink-0" />
+          <span className="text-gray-700 dark:text-gray-300">{skill.documents}</span>
         </div>
 
         <div className="flex items-center space-x-1 min-w-[50px]">
-          <Icons.MessageSquare className="w-3.5 h-3.5 text-zinc-400 dark:text-zinc-600 flex-shrink-0" />
-          <span className="text-zinc-700 dark:text-zinc-300">{skill.chats}</span>
+          <Icons.MessageSquare className="w-3.5 h-3.5 text-gray-400 dark:text-gray-600 flex-shrink-0" />
+          <span className="text-gray-700 dark:text-gray-300">{skill.chats}</span>
         </div>
 
         <div className="flex items-center space-x-1 min-w-[50px]">
-          <Icons.Brain className="w-3.5 h-3.5 text-zinc-400 dark:text-zinc-600 flex-shrink-0" />
-          <span className="text-zinc-700 dark:text-zinc-300">{skill.memories}</span>
+          <Icons.Brain className="w-3.5 h-3.5 text-gray-400 dark:text-gray-600 flex-shrink-0" />
+          <span className="text-gray-700 dark:text-gray-300">{skill.memories}</span>
         </div>
 
         <div className="flex items-center space-x-1 min-w-[60px]">
-          <Icons.HardDrive className="w-3.5 h-3.5 text-zinc-400 dark:text-zinc-600 flex-shrink-0" />
-          <span className="text-zinc-700 dark:text-zinc-300">{skill.storage}</span>
+          <Icons.HardDrive className="w-3.5 h-3.5 text-gray-400 dark:text-gray-600 flex-shrink-0" />
+          <span className="text-gray-700 dark:text-gray-300">{skill.storage}</span>
         </div>
 
-        <span className="text-[10px] text-zinc-500 font-medium normal-case flex items-center min-w-[100px]">
-          <Icons.Calendar className="w-3 h-3 text-zinc-400 dark:text-zinc-600 mr-1 flex-shrink-0" />
+        <span className="text-[10px] text-gray-500 font-medium normal-case flex items-center min-w-[100px]">
+          <Icons.Calendar className="w-3 h-3 text-gray-400 dark:text-gray-600 mr-1 flex-shrink-0" />
           {skill.lastUpdated}
         </span>
       </div>
 
       {/* Button & Dropdown Actions (right side) */}
-      <div className="flex items-center space-x-2 flex-shrink-0 w-full md:w-auto justify-end md:justify-start border-t md:border-t-0 border-zinc-100 dark:border-zinc-900/60 pt-3 md:pt-0">
+      <div className="flex items-center space-x-2 flex-shrink-0 w-full md:w-auto justify-end md:justify-start border-t md:border-t-0 border-gray-100 dark:border-gray-900/60 pt-3 md:pt-0">
         <button 
           onClick={() => onDelete(skill.id)}
           className="flex items-center justify-center w-7 h-7 rounded-lg text-red-500 hover:text-red-700 bg-red-500/10 hover:bg-red-500/20 transition-all cursor-pointer border border-transparent"
@@ -383,8 +383,8 @@ export default function SkillCard({
           <Icons.Trash2 className="w-3.5 h-3.5" />
         </button>
         <button 
-          onClick={() => router.push(`/chats/${skill.id}`)}
-          className="flex items-center justify-center h-7 px-3 text-[10px] font-bold rounded-lg bg-zinc-50 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white border border-zinc-200 dark:border-zinc-800 hover:border-zinc-350 dark:hover:border-zinc-700 transition-all duration-200 cursor-pointer"
+          onClick={() => router.push(`/chat/${skill.id}`)}
+          className="flex items-center justify-center h-7 px-3 text-[10px] font-bold rounded-lg bg-gray-50 dark:bg-gray-900 text-gray-700 dark:text-gray-300 hover:text-gray-950 dark:hover:text-white border border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 transition-all duration-200 cursor-pointer"
         >
           Open
         </button>
@@ -393,7 +393,7 @@ export default function SkillCard({
         <div ref={menuRef} className="relative">
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="p-1.5 rounded-lg text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-350 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors border border-transparent hover:border-zinc-200 dark:hover:border-zinc-800 cursor-pointer"
+            className="p-1.5 rounded-lg text-gray-500 hover:text-gray-800 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors border border-transparent hover:border-gray-200 dark:hover:border-gray-800 cursor-pointer"
             aria-label="Actions menu"
           >
             <Icons.MoreHorizontal className="w-4.5 h-4.5" />
@@ -406,16 +406,16 @@ export default function SkillCard({
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 5 }}
                 transition={{ duration: 0.1 }}
-                className="absolute right-0 mt-1 w-40 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-1 shadow-2xl z-30"
+                className="absolute right-0 mt-1 w-40 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 p-1 shadow-2xl z-30"
               >
                 <button
                   onClick={() => {
                     setIsRenaming(true);
                     setMenuOpen(false);
                   }}
-                  className="flex items-center w-full h-8 px-2.5 rounded-md text-left text-[11px] text-zinc-655 dark:text-zinc-400 hover:text-zinc-955 dark:hover:text-white hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors cursor-pointer font-medium"
+                  className="flex items-center w-full h-8 px-2.5 rounded-md text-left text-[11px] text-gray-600 dark:text-gray-400 hover:text-gray-950 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors cursor-pointer font-medium"
                 >
-                  <Icons.Edit className="w-3.5 h-3.5 mr-2 text-zinc-400 dark:text-zinc-505" />
+                  <Icons.Edit className="w-3.5 h-3.5 mr-2 text-gray-400 dark:text-gray-500" />
                   Rename
                 </button>
 
@@ -424,9 +424,9 @@ export default function SkillCard({
                     onDuplicate(skill.id);
                     setMenuOpen(false);
                   }}
-                  className="flex items-center w-full h-8 px-2.5 rounded-md text-left text-[11px] text-zinc-655 dark:text-zinc-400 hover:text-zinc-955 dark:hover:text-white hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors cursor-pointer font-medium"
+                  className="flex items-center w-full h-8 px-2.5 rounded-md text-left text-[11px] text-gray-600 dark:text-gray-400 hover:text-gray-950 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors cursor-pointer font-medium"
                 >
-                  <Icons.Copy className="w-3.5 h-3.5 mr-2 text-zinc-400 dark:text-zinc-505" />
+                  <Icons.Copy className="w-3.5 h-3.5 mr-2 text-gray-400 dark:text-gray-500" />
                   Duplicate
                 </button>
 
@@ -435,9 +435,9 @@ export default function SkillCard({
                     onPinToggle(skill.id);
                     setMenuOpen(false);
                   }}
-                  className="flex items-center w-full h-8 px-2.5 rounded-md text-left text-[11px] text-zinc-655 dark:text-zinc-400 hover:text-zinc-955 dark:hover:text-white hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors cursor-pointer font-medium"
+                  className="flex items-center w-full h-8 px-2.5 rounded-md text-left text-[11px] text-gray-600 dark:text-gray-400 hover:text-gray-950 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors cursor-pointer font-medium"
                 >
-                  <Icons.Pin className="w-3.5 h-3.5 mr-2 text-zinc-400 dark:text-zinc-505" />
+                  <Icons.Pin className="w-3.5 h-3.5 mr-2 text-gray-400 dark:text-gray-500" />
                   {skill.isPinned ? "Unpin" : "Pin"}
                 </button>
 
@@ -445,13 +445,13 @@ export default function SkillCard({
                   onClick={() => {
                     setMenuOpen(false);
                   }}
-                  className="flex items-center w-full h-8 px-2.5 rounded-md text-left text-[11px] text-zinc-655 dark:text-zinc-400 hover:text-zinc-955 dark:hover:text-white hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors cursor-pointer font-medium"
+                  className="flex items-center w-full h-8 px-2.5 rounded-md text-left text-[11px] text-gray-600 dark:text-gray-400 hover:text-gray-950 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors cursor-pointer font-medium"
                 >
-                  <Icons.Archive className="w-3.5 h-3.5 mr-2 text-zinc-400 dark:text-zinc-505" />
+                  <Icons.Archive className="w-3.5 h-3.5 mr-2 text-gray-400 dark:text-gray-500" />
                   Archive
                 </button>
 
-                <div className="border-t border-zinc-100 dark:border-zinc-900 my-1 mx-1" />
+                <div className="border-t border-gray-100 dark:border-gray-900 my-1 mx-1" />
 
                 <button
                   onClick={() => {

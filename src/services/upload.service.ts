@@ -255,4 +255,14 @@ export class UploadService {
       orderBy: { uploadedAt: "desc" },
     });
   }
+
+  /**
+   * Retrieves knowledge files filtered by skill ID.
+   */
+  static async findFilesBySkill(skillId: string): Promise<KnowledgeFile[]> {
+    return prisma.knowledgeFile.findMany({
+      where: { skillId },
+      orderBy: { uploadedAt: "desc" },
+    });
+  }
 }

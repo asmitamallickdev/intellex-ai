@@ -75,10 +75,10 @@ export default function KnowledgeUploader({
   return (
     <div className="space-y-2">
       <div className="space-y-0.5">
-        <label className="text-[10px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider block">
+        <label className="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider block">
           Initial Knowledge (Optional)
         </label>
-        <p className="text-[9px] text-zinc-450 dark:text-zinc-500 font-semibold tracking-wide uppercase">
+        <p className="text-[9px] text-gray-400 dark:text-gray-500 font-semibold tracking-wide uppercase">
           Upload documents now or skip this step and add them later
         </p>
       </div>
@@ -89,8 +89,8 @@ export default function KnowledgeUploader({
         onDrop={handleDrop}
         onClick={triggerInput}
         className={cn(
-          "flex flex-col items-center justify-center p-5 rounded-xl border border-dashed border-zinc-200 dark:border-zinc-900 bg-zinc-50/20 dark:bg-zinc-955/20 backdrop-blur-xs cursor-pointer select-none transition-all duration-300 hover:border-zinc-300 dark:hover:border-zinc-800 hover:bg-zinc-50/50 dark:hover:bg-zinc-900/10",
-          isDragging && "border-violet-500 bg-violet-500/5 shadow-[0_0_15px_rgba(139,92,246,0.05)]"
+          "flex flex-col items-center justify-center p-5 rounded-xl border border-dashed border-gray-200 dark:border-gray-900 bg-gray-50/20 dark:bg-gray-950/20 backdrop-blur-xs cursor-pointer select-none transition-all duration-300 hover:border-gray-300 dark:hover:border-gray-800 hover:bg-gray-50/50 dark:hover:bg-gray-900/10",
+          isDragging && "border-orange-500 bg-orange-500/5 shadow-[0_0_15px_rgba(234,88,12,0.05)]"
         )}
       >
         <input
@@ -103,20 +103,20 @@ export default function KnowledgeUploader({
         />
 
         <div className={cn(
-          "flex items-center justify-center w-8.5 h-8.5 rounded-lg bg-zinc-100 dark:bg-zinc-900 text-zinc-500 mb-2 border border-zinc-200 dark:border-zinc-850",
-          isDragging && "bg-violet-500 text-white border-violet-400"
+          "flex items-center justify-center w-8.5 h-8.5 rounded-lg bg-gray-100 dark:bg-gray-900 text-gray-500 dark:text-gray-300 mb-2 border border-gray-200 dark:border-gray-800",
+          isDragging && "bg-orange-500 text-white border-orange-400"
         )}>
           <Upload className="w-4 h-4" />
         </div>
 
         <div className="text-center space-y-0.5">
-          <span className="text-[11px] font-bold text-zinc-800 dark:text-zinc-300">
+          <span className="text-[11px] font-bold text-gray-800 dark:text-gray-300">
             Drag & Drop Files
           </span>
-          <span className="text-[10px] text-zinc-550 dark:text-zinc-500 font-semibold block">
-            or <span className="text-violet-650 dark:text-violet-400 underline decoration-2 underline-offset-1">Click to Browse</span>
+          <span className="text-[10px] text-gray-500 dark:text-gray-400 font-semibold block">
+            or <span className="text-orange-600 dark:text-orange-400 underline decoration-2 underline-offset-1">Click to Browse</span>
           </span>
-          <span className="text-[9px] text-zinc-400 dark:text-zinc-600 font-semibold block pt-1.5 uppercase tracking-wide">
+          <span className="text-[9px] text-gray-400 dark:text-gray-600 font-semibold block pt-1.5 uppercase tracking-wide">
             PDF, DOCX, PPTX, XLSX, TXT, CSV, MD, Images (Max 50MB)
           </span>
         </div>

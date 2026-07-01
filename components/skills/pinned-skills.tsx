@@ -23,15 +23,15 @@ const colorMap: Record<string, { bg: string; text: string; border: string; borde
   orange: { bg: "bg-orange-500/10", text: "text-orange-600 dark:text-orange-400", border: "border-orange-500/10", borderHover: "group-hover:border-orange-500/30", glow: "rgba(249,115,22,0.02)" },
   red: { bg: "bg-red-500/10", text: "text-red-600 dark:text-red-400", border: "border-red-500/10", borderHover: "group-hover:border-red-500/30", glow: "rgba(239,68,68,0.02)" },
   pink: { bg: "bg-pink-500/10", text: "text-pink-600 dark:text-pink-400", border: "border-pink-500/10", borderHover: "group-hover:border-pink-500/30", glow: "rgba(236,72,153,0.02)" },
-  zinc: { bg: "bg-zinc-500/10", text: "text-zinc-600 dark:text-zinc-400", border: "border-zinc-500/10", borderHover: "group-hover:border-zinc-500/30", glow: "rgba(113,113,122,0.02)" },
+  zinc: { bg: "bg-gray-500/10", text: "text-gray-600 dark:text-gray-400", border: "border-gray-500/10", borderHover: "group-hover:border-gray-500/30", glow: "rgba(113,113,122,0.02)" },
 };
 
 export default function PinnedSkills({ skills, onPinToggle }: PinnedSkillsProps) {
   return (
     <section className="space-y-3">
       <div className="flex items-center space-x-2">
-        <Icons.Pin className="w-3.5 h-3.5 text-violet-600 dark:text-violet-400 rotate-45" />
-        <h3 className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">
+        <Icons.Pin className="w-3.5 h-3.5 text-orange-600 dark:text-orange-400 rotate-45" />
+        <h3 className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
           Pinned Workspaces
         </h3>
       </div>
@@ -48,7 +48,7 @@ export default function PinnedSkills({ skills, onPinToggle }: PinnedSkillsProps)
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: idx * 0.05 }}
               whileHover={{ y: -2 }}
-              className="group relative flex items-center justify-between p-3.5 rounded-xl border border-zinc-200 dark:border-zinc-900 bg-white dark:bg-zinc-900/10 backdrop-blur-sm cursor-pointer transition-all hover:bg-zinc-55 dark:hover:bg-zinc-900/20"
+              className="group relative flex items-center justify-between p-3.5 rounded-xl border border-gray-200 dark:border-gray-900 bg-white dark:bg-gray-900/10 backdrop-blur-sm cursor-pointer transition-all hover:bg-gray-50 dark:hover:bg-gray-900/20"
               style={{
                 boxShadow: `inset 0 0 12px ${colorStyles.glow}`,
               }}
@@ -64,10 +64,10 @@ export default function PinnedSkills({ skills, onPinToggle }: PinnedSkillsProps)
                 </div>
 
                 <div className="min-w-0 space-y-0.5">
-                  <h4 className="text-xs font-semibold text-zinc-800 dark:text-zinc-200 group-hover:text-zinc-950 group-hover:dark:text-white transition-colors duration-150 truncate">
+                  <h4 className="text-xs font-semibold text-gray-800 dark:text-gray-200 group-hover:text-gray-950 group-hover:dark:text-white transition-colors duration-150 truncate">
                     {skill.name}
                   </h4>
-                  <div className="flex items-center text-[9px] text-zinc-500 font-semibold tracking-wide uppercase">
+                  <div className="flex items-center text-[9px] text-gray-500 font-semibold tracking-wide uppercase">
                     <span>{skill.category}</span>
                     <span className="mx-1">•</span>
                     <span>{skill.documents} Docs</span>
@@ -81,7 +81,7 @@ export default function PinnedSkills({ skills, onPinToggle }: PinnedSkillsProps)
                   e.stopPropagation();
                   onPinToggle(skill.id);
                 }}
-                className="p-1.5 rounded-lg text-zinc-500 hover:text-violet-650 dark:hover:text-violet-400 hover:bg-zinc-100 dark:hover:bg-zinc-900/80 transition-all border border-transparent hover:border-zinc-200 dark:hover:border-zinc-800 cursor-pointer"
+                className="p-1.5 rounded-lg text-gray-500 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-gray-100 dark:hover:bg-gray-900/80 transition-all border border-transparent hover:border-gray-200 dark:hover:border-gray-800 cursor-pointer"
                 title="Unpin from dashboard"
               >
                 <Icons.PinOff className="w-3.5 h-3.5" />

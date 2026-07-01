@@ -16,7 +16,7 @@ export default function ColorPicker({
 }: ColorPickerProps) {
   return (
     <div className="space-y-2">
-      <label className="text-[10px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider block">
+      <label className="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider block">
         Accent Color
       </label>
       <div className="flex flex-wrap gap-2.5">
@@ -31,7 +31,7 @@ export default function ColorPicker({
               className={cn(
                 "w-6.5 h-6.5 rounded-full cursor-pointer flex items-center justify-center border border-black/45 transition-transform duration-200 hover:scale-105 active:scale-95",
                 color.bgClass,
-                isSelected && "ring-2 ring-violet-500 ring-offset-2 ring-offset-white dark:ring-offset-zinc-950"
+                isSelected && "ring-2 ring-orange-500 ring-offset-2 ring-offset-white dark:ring-offset-gray-950"
               )}
               title={color.name}
             >

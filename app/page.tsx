@@ -16,7 +16,7 @@ export default function Home() {
 
       {/* 2. Quick Action Cards (Three columns) */}
       <section className="space-y-3">
-        <h2 className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider px-1">
+        <h2 className="text-[10px] font-bold text-gray-600 dark:text-gray-500 dark:text-gray-400 uppercase tracking-wider px-1">
           Quick Actions
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -46,7 +46,7 @@ export default function Home() {
 
       {/* 3. Statistics Section (Five columns) */}
       <section className="space-y-3">
-        <h2 className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider px-1">
+        <h2 className="text-[10px] font-bold text-gray-600 dark:text-gray-500 dark:text-gray-400 uppercase tracking-wider px-1">
           Platform Overview
         </h2>
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">

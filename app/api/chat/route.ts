@@ -1,15 +1,34 @@
 import { openai } from "@ai-sdk/openai";
-import { convertToModelMessages, createUIMessageStreamResponse, stepCountIs, streamText, toUIMessageStream, tool } from "ai";
+import { convertToModelMessages, createUIMessageStreamResponse, generateText, stepCountIs, streamText, toUIMessageStream, tool } from "ai";
 import { z } from "zod";
 import { SkillService } from "@/src/services/skill.service";
 import { SearchService } from "@/src/services/search.service";
+import { ChatService } from "@/src/services/chat.service";
+import { ChatMemoryService } from "@/src/services/chatMemory.service";
+import prisma from "@/src/lib/prisma";
+import { MessageRole } from "@prisma/client";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(req: Request) {
-  const { messages, skillId } = await req.json();
-  console.log("/api/chat")
-  console.log(skillId);
+  const { messages, skillId, chatId } = await req.json();
+  console.log("/api/chat", { skillId, chatId });
+
+  if (chatId) {
+    const lastUserMsg = messages?.filter((m: any) => m.role === "user").pop();
+    if (lastUserMsg) {
+      const textPart = (lastUserMsg.parts ?? []).find((p: any) => p.type === "text") as { text: string } | undefined;
+      if (textPart?.text) {
+        await prisma.message.create({
+          data: {
+            chatId,
+            role: MessageRole.USER,
+            content: textPart.text,
+          },
+        }).catch((err) => console.error("[API] Failed to save user message:", err));
+      }
+    }
+  }
 
   const skill = await SkillService.findById(skillId);
 
@@ -30,6 +49,8 @@ export async function POST(req: Request) {
         "   - If the knowledge base has no relevant information, say so honestly: \"I couldn't find information about this in the knowledge base. Could you rephrase your question or upload relevant documents?\"",
         "4. **Respond in a clear, well-structured format** using markdown when helpful (bullet points, numbered lists, headers, bold for key terms).",
         "5. **Be conversational and helpful.** Greet users warmly, ask clarifying questions when the query is ambiguous, and suggest related topics they might explore.",
+        "6. **Use the \`saveToMemory\` tool when the user explicitly asks to remember something, or when you encounter important context worth preserving.** The tool saves the recent conversation context to long-term memory.",
+        "7. **Use the \`searchMemory\` tool when the user refers to something from a past conversation or asks about previously remembered information.** Formulate a clear search query to retrieve relevant memories.",
         "",
         "## WHAT YOU MUST NOT DO",
         "- Do NOT answer from general world knowledge. Only use the knowledge base.",
@@ -70,9 +91,94 @@ export async function POST(req: Request) {
           }));
         },
       }),
+      searchMemory: tool({
+        description:
+          "Search past conversation memories for relevant context using semantic similarity. Call this when the user refers to something discussed in a previous conversation or asks about previously remembered information.",
+        inputSchema: z.object({
+          query: z
+            .string()
+            .describe(
+              "A focused search query to find relevant past conversation memories."
+            ),
+        }),
+        execute: async ({ query }) => {
+          const results = await ChatMemoryService.searchMemory(query, skillId, 5);
+          return results.map((r) => ({
+            context: r.context,
+            summary: r.summary,
+            score: r.score,
+          }));
+        },
+      }),
+      saveToMemory: tool({
+        description:
+          "Save important conversation context to long-term memory. Call this when the user explicitly asks to remember something, or when critical information is shared that should be preserved for future conversations.",
+        inputSchema: z.object({
+          summary: z
+            .string()
+            .describe("A brief title or summary of what to remember (max 10 words)"),
+        }),
+        execute: async ({ summary }) => {
+          const recentMessages = messages.slice(-10);
+          const context = recentMessages
+            .map((m: any) => {
+              const role = m.role === "user" ? "User" : "Assistant";
+              const text = (m.parts ?? []).find((p: any) => p.type === "text")?.text || "";
+              return `${role}: ${text}`;
+            })
+            .join("\n");
+
+          await ChatMemoryService.saveMemory(skillId, chatId, context, summary);
+          return { success: true, message: "Conversation context saved to long-term memory." };
+        },
+      }),
     },
   });
 
-  const uiMessageStream = toUIMessageStream({ stream: result.stream as ReadableStream<any> });
+  const uiMessageStream = toUIMessageStream({
+    stream: result.stream as ReadableStream<any>,
+    onEnd: async ({ messages: updatedMessages }) => {
+      if (chatId) {
+        const lastAssistantMsg = updatedMessages?.filter((m) => m.role === "assistant").pop();
+        if (lastAssistantMsg) {
+          const textPart = (lastAssistantMsg.parts ?? []).find((p) => p.type === "text") as { text: string } | undefined;
+          if (textPart?.text) {
+            await prisma.message.create({
+              data: {
+                chatId,
+                role: MessageRole.ASSISTANT,
+                content: textPart.text,
+              },
+            }).catch((err) => console.error("[API] Failed to save assistant message:", err));
+          }
+        }
+
+        // Auto-rename chat after first exchange
+        const msgCount = await prisma.message.count({ where: { chatId } });
+        if (msgCount === 2) {
+          const lastUserMsg = updatedMessages?.filter((m) => m.role === "user").pop();
+          const lastAssistantMsgForTitle = updatedMessages?.filter((m) => m.role === "assistant").pop();
+          const userText = ((lastUserMsg?.parts ?? []).find((p: any) => p.type === "text") as { text: string } | undefined)?.text || "";
+          const assistantText = ((lastAssistantMsgForTitle?.parts ?? []).find((p: any) => p.type === "text") as { text: string } | undefined)?.text || "";
+
+          if (userText && assistantText) {
+            generateText({
+              model: openai("gpt-4o-mini"),
+              system: "Generate a concise title (max 6 words) summarizing this chat conversation. Return ONLY the title — no quotes, no punctuation, no explanation.",
+              prompt: `User: ${userText}\n\nAI: ${assistantText}`,
+              maxOutputTokens: 30,
+              temperature: 0.3,
+            }).then(({ text: title }) => {
+              if (title?.trim()) {
+                ChatService.renameChat(chatId, title.trim()).catch((err) =>
+                  console.error("[API] Failed to rename chat:", err)
+                );
+              }
+            }).catch((err) => console.error("[API] Title generation failed:", err));
+          }
+        }
+      }
+    },
+  });
   return createUIMessageStreamResponse({ stream: uiMessageStream });
 }

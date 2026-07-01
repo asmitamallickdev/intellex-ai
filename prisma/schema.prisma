@@ -91,6 +91,7 @@ model Skill {
   knowledgeFiles KnowledgeFile[]
   chats          Chat[]
   memories       Memory[]
+  chatMemories   ChatMemory[]
   documents      Document[]
   chunks         Chunk[]
 
@@ -232,4 +233,21 @@ model Memory {
   @@index([skillId])
   @@index([createdAt])
   @@map("memories")
+}
+
+/// Conversation context saved to memory via the saveToMemory tool.
+model ChatMemory {
+  id        String   @id @default(uuid()) @db.Uuid
+  skillId   String   @db.Uuid
+  chatId    String?  @db.Uuid
+  context   String   @db.Text
+  summary   String?
+  embedding Unsupported("vector(1536)")?
+  createdAt DateTime @default(now())
+
+  skill Skill @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@index([skillId])
+  @@index([createdAt])
+  @@map("chat_memories")
 }

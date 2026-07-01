@@ -156,6 +156,14 @@ export class SkillService {
     return prisma.skill.findMany({
       where: whereClause,
       orderBy: orderByClause,
+      include: {
+        _count: {
+          select: {
+            knowledgeFiles: true,
+            chats: true,
+          },
+        },
+      },
     });
   }
 
@@ -170,6 +178,14 @@ export class SkillService {
         category,
       },
       orderBy: { createdAt: "desc" },
+      include: {
+        _count: {
+          select: {
+            knowledgeFiles: true,
+            chats: true,
+          },
+        },
+      },
     });
   }
 
@@ -184,6 +200,14 @@ export class SkillService {
         isPinned: true,
       },
       orderBy: { name: "asc" },
+      include: {
+        _count: {
+          select: {
+            knowledgeFiles: true,
+            chats: true,
+          },
+        },
+      },
     });
   }
 }

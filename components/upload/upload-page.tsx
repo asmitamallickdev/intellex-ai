@@ -83,7 +83,7 @@ export default function UploadPage() {
             description: "General workspace for files and chats.",
             category: "General",
             icon: "Brain",
-            color: "violet",
+            color: "orange",
           });
           if (defaultSkill.success && defaultSkill.data) {
             skillId = defaultSkill.data.id;
@@ -257,7 +257,7 @@ export default function UploadPage() {
       <div className="fixed bottom-6 right-6 z-40 flex items-center space-x-3 select-none">
         {/* Cloud Import (Disabled) */}
         <button
-          className="flex items-center justify-center gap-1.5 h-8 px-3 text-[10px] font-bold rounded-full bg-zinc-50/80 dark:bg-zinc-900/80 border border-zinc-200 dark:border-zinc-800 text-zinc-400 dark:text-zinc-555 opacity-55 cursor-not-allowed shadow-lg"
+          className="flex items-center justify-center gap-1.5 h-8 px-3 text-[10px] font-bold rounded-full bg-gray-50/80 dark:bg-gray-900/80 border border-gray-200 dark:border-gray-800 text-gray-400 dark:text-gray-300 opacity-55 cursor-not-allowed shadow-lg"
           disabled
         >
           <Cloud className="w-3.5 h-3.5" />
@@ -269,9 +269,9 @@ export default function UploadPage() {
           onClick={() => {
             toast.success("Folder creation successfully initialized");
           }}
-          className="flex items-center justify-center gap-1.5 h-8 px-3 text-[10px] font-bold rounded-full bg-zinc-50 dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-855 border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:text-zinc-955 dark:hover:text-white transition-all shadow-lg cursor-pointer"
+          className="flex items-center justify-center gap-1.5 h-8 px-3 text-[10px] font-bold rounded-full bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 border border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 text-gray-700 dark:text-gray-300 hover:text-gray-950 dark:hover:text-white transition-all shadow-lg cursor-pointer"
         >
-          <FolderPlus className="w-3.5 h-3.5 text-zinc-400 dark:text-zinc-550" />
+          <FolderPlus className="w-3.5 h-3.5 text-gray-400 dark:text-gray-300" />
           New Folder
         </button>
 
@@ -281,7 +281,7 @@ export default function UploadPage() {
             const fileInput = document.getElementById("hidden-file-input");
             fileInput?.click();
           }}
-          className="flex items-center justify-center gap-1.5 h-8 px-3.5 text-[10px] font-bold rounded-full bg-violet-600 hover:bg-violet-500 text-white border border-violet-500/25 shadow-lg cursor-pointer transition-all hover:scale-103"
+          className="flex items-center justify-center gap-1.5 h-8 px-3.5 text-[10px] font-bold rounded-full bg-orange-600 hover:bg-orange-500 text-white border border-orange-500/25 shadow-lg cursor-pointer transition-all hover:scale-103"
         >
           <Plus className="w-3.5 h-3.5" />
           Upload More

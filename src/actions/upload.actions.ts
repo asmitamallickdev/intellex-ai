@@ -167,3 +167,33 @@ export async function getAllFilesAction(): Promise<UploadResponse<KnowledgeFile[
     };
   }
 }
+
+/**
+ * Server Action: Retrieves knowledge files for a specific skill.
+ */
+export async function getFilesBySkillAction(skillId: string): Promise<UploadResponse<KnowledgeFile[]>> {
+  try {
+    if (!skillId) {
+      return {
+        success: false,
+        error: "Skill ID is required.",
+        statusCode: 400,
+      };
+    }
+
+    const files = await UploadService.findFilesBySkill(skillId);
+    return {
+      success: true,
+      data: files,
+      message: "Files retrieved successfully.",
+      statusCode: 200,
+    };
+  } catch (err: any) {
+    console.error(`[Upload Actions] Error retrieving files for skill ${skillId}:`, err);
+    return {
+      success: false,
+      error: err.message || "Failed to retrieve files.",
+      statusCode: 500,
+    };
+  }
+}

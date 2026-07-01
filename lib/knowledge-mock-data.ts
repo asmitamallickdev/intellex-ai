@@ -1,4 +1,4 @@
-export interface KnowledgeDocument {
+﻿export interface KnowledgeDocument {
   id: string;
   name: string;
   type: string;
@@ -80,7 +80,7 @@ export const mockRepositories: SkillRepository[] = [
     chatsCount: 892,
     progressPercent: 78,
     iconName: "Rocket",
-    accentColor: "text-violet-500 bg-violet-500/10 border-violet-500/20",
+    accentColor: "text-orange-500 bg-orange-500/10 border-orange-500/20",
     documents: [
       {
         id: "doc-2-1",

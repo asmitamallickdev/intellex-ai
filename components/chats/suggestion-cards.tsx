@@ -27,19 +27,19 @@ function SuggestionCard({ prompt, onClick, index }: SuggestionCardItemProps) {
       whileHover={{ y: -3, transition: { duration: 0.2 } }}
       whileTap={{ scale: 0.98 }}
       onClick={onClick}
-      className="flex flex-col items-start p-4 rounded-xl border border-zinc-200 dark:border-zinc-900 bg-white dark:bg-zinc-900/10 hover:bg-zinc-50 dark:hover:bg-zinc-900/30 hover:border-zinc-300 dark:hover:border-zinc-800 transition-colors duration-200 text-left cursor-pointer group shadow-sm hover:shadow-[0_8px_25px_rgba(139,92,246,0.03)] select-none"
+      className="flex flex-col items-start p-4 rounded-xl border border-gray-200 dark:border-gray-900 bg-white dark:bg-gray-900/10 hover:bg-gray-50 dark:hover:bg-gray-900/30 hover:border-gray-300 dark:hover:border-gray-800 transition-colors duration-200 text-left cursor-pointer group shadow-sm hover:shadow-[0_8px_25px_rgba(234,88,12,0.03)] select-none"
     >
       {/* Icon circle */}
-      <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-violet-50 dark:bg-violet-500/10 border border-violet-100 dark:border-violet-500/10 text-violet-600 dark:text-violet-400 group-hover:bg-violet-100 dark:group-hover:bg-violet-500/20 group-hover:text-violet-700 dark:group-hover:text-violet-300 transition-all duration-300 mb-3 flex-shrink-0">
+      <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-orange-50 dark:bg-orange-500/10 border border-orange-100 dark:border-orange-500/10 text-orange-600 dark:text-orange-400 group-hover:bg-orange-100 dark:group-hover:bg-orange-500/20 group-hover:text-orange-700 dark:group-hover:text-orange-300 transition-all duration-300 mb-3 flex-shrink-0">
         <Icon className="w-4 h-4" />
       </div>
 
       {/* Description Text */}
       <div className="space-y-1">
-        <h4 className="text-xs font-semibold text-zinc-850 dark:text-zinc-200 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors duration-150">
+        <h4 className="text-xs font-semibold text-gray-800 dark:text-gray-200 group-hover:text-gray-950 dark:group-hover:text-white transition-colors duration-150">
           {prompt.title}
         </h4>
-        <p className="text-[10px] text-zinc-500 dark:text-zinc-500 font-medium leading-relaxed">
+        <p className="text-[10px] text-gray-500 dark:text-gray-400 font-medium leading-relaxed">
           {prompt.description}
         </p>
       </div>

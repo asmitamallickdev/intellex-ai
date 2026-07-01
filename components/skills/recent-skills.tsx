@@ -22,15 +22,15 @@ const colorMap: Record<string, { bg: string; text: string; border: string }> = {
   orange: { bg: "bg-orange-500/10", text: "text-orange-600 dark:text-orange-400", border: "border-orange-500/15" },
   red: { bg: "bg-red-500/10", text: "text-red-600 dark:text-red-400", border: "border-red-500/15" },
   pink: { bg: "bg-pink-500/10", text: "text-pink-600 dark:text-pink-400", border: "border-pink-500/15" },
-  zinc: { bg: "bg-zinc-500/10", text: "text-zinc-600 dark:text-zinc-400", border: "border-zinc-500/15" },
+  zinc: { bg: "bg-gray-500/10", text: "text-gray-600 dark:text-gray-400", border: "border-gray-500/15" },
 };
 
 export default function RecentSkills({ skills }: RecentSkillsProps) {
   return (
     <section className="space-y-3">
       <div className="flex items-center space-x-2">
-        <Icons.Clock className="w-3.5 h-3.5 text-zinc-500 animate-none" />
-        <h3 className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">
+        <Icons.Clock className="w-3.5 h-3.5 text-gray-500 animate-none" />
+        <h3 className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
           Recently Accessed
         </h3>
       </div>
@@ -46,7 +46,7 @@ export default function RecentSkills({ skills }: RecentSkillsProps) {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: idx * 0.05 }}
-              className="flex items-center justify-between p-4 rounded-xl border border-zinc-200 dark:border-zinc-900 bg-white dark:bg-zinc-900/10 backdrop-blur-sm group hover:bg-zinc-55 dark:hover:bg-zinc-900/20 transition-all duration-200"
+              className="flex items-center justify-between p-4 rounded-xl border border-gray-200 dark:border-gray-900 bg-white dark:bg-gray-900/10 backdrop-blur-sm group hover:bg-gray-50 dark:hover:bg-gray-900/20 transition-all duration-200"
             >
               {/* Left detail: icon, name, timestamp */}
               <div className="flex items-center space-x-3.5 min-w-0 mr-4">
@@ -59,17 +59,17 @@ export default function RecentSkills({ skills }: RecentSkillsProps) {
                 </div>
                 
                 <div className="min-w-0 space-y-0.5">
-                  <h4 className="text-xs font-semibold text-zinc-800 dark:text-zinc-200 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors duration-150 truncate">
+                  <h4 className="text-xs font-semibold text-gray-800 dark:text-gray-200 group-hover:text-gray-950 dark:group-hover:text-white transition-colors duration-150 truncate">
                     {skill.name}
                   </h4>
-                  <p className="text-[10px] text-zinc-500 font-medium">
+                  <p className="text-[10px] text-gray-500 font-medium">
                     Last opened: {skill.lastUpdated}
                   </p>
                 </div>
               </div>
 
               {/* Right detail: continue button */}
-              <button className="flex items-center justify-center h-7 px-3 text-[10px] font-bold rounded-lg bg-violet-50 dark:bg-violet-600/10 hover:bg-violet-100 dark:hover:bg-violet-600/20 text-violet-600 dark:text-violet-300 border border-violet-200/50 dark:border-violet-500/20 hover:border-violet-350 dark:hover:border-violet-500/30 transition-all duration-200 cursor-pointer flex-shrink-0">
+              <button className="flex items-center justify-center h-7 px-3 text-[10px] font-bold rounded-lg bg-orange-50 dark:bg-orange-600/10 hover:bg-orange-100 dark:hover:bg-orange-600/20 text-orange-600 dark:text-orange-300 border border-orange-200/50 dark:border-orange-500/20 hover:border-orange-300 dark:hover:border-orange-500/30 transition-all duration-200 cursor-pointer flex-shrink-0">
                 Continue
                 <Icons.ArrowRight className="w-3 h-3 ml-1 transition-transform duration-200 group-hover:translate-x-0.5" />
               </button>

@@ -32,14 +32,14 @@ export default function SearchFilesBar({
       {/* Search Input bar */}
       <div className="relative w-full group">
         <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
-          <Search className="h-4 w-4 text-zinc-400 dark:text-zinc-505 group-focus-within:text-violet-555 dark:group-focus-within:text-violet-400 transition-colors duration-200" />
+          <Search className="h-4 w-4 text-gray-400 dark:text-gray-500 group-focus-within:text-orange-500 dark:group-focus-within:text-orange-400 transition-colors duration-200" />
         </div>
         <input
           type="text"
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
           placeholder="Search uploaded files by name..."
-          className="w-full h-9 pl-9 pr-4 text-xs bg-white dark:bg-zinc-900/30 border border-zinc-200 dark:border-zinc-900 hover:border-zinc-300 dark:hover:border-zinc-800 focus:border-violet-500/80 focus:bg-white dark:focus:bg-zinc-900/60 focus:ring-1 focus:ring-violet-500/30 rounded-lg text-zinc-800 dark:text-zinc-200 placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none transition-all duration-200"
+          className="w-full h-9 pl-9 pr-4 text-xs bg-white dark:bg-gray-900/30 border border-gray-200 dark:border-gray-900 hover:border-gray-300 dark:hover:border-gray-800 focus:border-orange-500/80 focus:bg-white dark:focus:bg-gray-900/60 focus:ring-1 focus:ring-orange-500/30 rounded-lg text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none transition-all duration-200"
         />
       </div>
 
@@ -55,8 +55,8 @@ export default function SearchFilesBar({
               className={cn(
                 "h-7 px-3 text-[10px] font-bold rounded-lg border tracking-wide whitespace-nowrap transition-all duration-200 cursor-pointer select-none",
                 isActive
-                  ? "bg-violet-50 dark:bg-violet-500/10 text-violet-650 dark:text-violet-300 border-violet-200 dark:border-violet-500/30 font-extrabold shadow-sm"
-                  : "bg-white dark:bg-zinc-900/40 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 border border-zinc-200 dark:border-zinc-900 hover:border-zinc-300 dark:hover:border-zinc-800"
+                  ? "bg-orange-50 dark:bg-orange-500/10 text-orange-600 dark:text-orange-300 border-orange-200 dark:border-orange-500/30 font-extrabold shadow-sm"
+                  : "bg-white dark:bg-gray-900/40 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 border border-gray-200 dark:border-gray-900 hover:border-gray-300 dark:hover:border-gray-800"
               )}
             >
               {opt}

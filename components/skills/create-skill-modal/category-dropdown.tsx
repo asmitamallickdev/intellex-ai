@@ -18,7 +18,7 @@ export default function CategoryDropdown({
   return (
     <div className="space-y-1.5 flex-1">
       <div className="flex items-center justify-between">
-        <label className="text-[10px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
+        <label className="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
           Category *
         </label>
         {error && (
@@ -31,17 +31,17 @@ export default function CategoryDropdown({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         className={cn(
-          "w-full h-9 px-3 text-xs bg-white dark:bg-zinc-900 border hover:border-zinc-300 dark:hover:border-zinc-800 focus:outline-none transition-all rounded-lg text-zinc-800 dark:text-zinc-200 cursor-pointer",
+          "w-full h-9 px-3 text-xs bg-white dark:bg-gray-900 border hover:border-gray-300 dark:hover:border-gray-800 focus:outline-none transition-all rounded-lg text-gray-800 dark:text-gray-200 cursor-pointer",
           error
             ? "border-red-500/80 focus:border-red-500 focus:ring-1 focus:ring-red-500/20"
-            : "border-zinc-200 dark:border-zinc-900 focus:border-violet-500/80 focus:ring-1 focus:ring-violet-500/30"
+            : "border-gray-200 dark:border-gray-900 focus:border-orange-500/80 focus:ring-1 focus:ring-orange-500/30"
         )}
       >
-        <option value="" disabled className="bg-white dark:bg-zinc-950 text-zinc-400 dark:text-zinc-650">
+        <option value="" disabled className="bg-white dark:bg-gray-950 text-gray-400 dark:text-gray-600">
           Select Category
         </option>
         {modalCategories.map((cat) => (
-          <option key={cat} value={cat} className="bg-white dark:bg-zinc-955 text-zinc-800 dark:text-zinc-200">
+          <option key={cat} value={cat} className="bg-white dark:bg-gray-950 text-gray-800 dark:text-gray-200">
             {cat}
           </option>
         ))}

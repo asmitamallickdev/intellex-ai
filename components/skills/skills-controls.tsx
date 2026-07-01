@@ -54,14 +54,14 @@ export default function SkillsControls({
       {/* Search Input bar */}
       <div className="relative flex-1 max-w-md group">
         <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
-          <Search className="h-4 w-4 text-zinc-400 dark:text-zinc-500 group-focus-within:text-violet-555 dark:group-focus-within:text-violet-400 transition-colors duration-200" />
+          <Search className="h-4 w-4 text-gray-400 dark:text-gray-600 dark:text-gray-500 dark:text-gray-400 group-focus-within:text-orange-500 dark:group-focus-within:text-orange-400 transition-colors duration-200" />
         </div>
         <input
           type="text"
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
           placeholder="Search workspaces..."
-          className="w-full h-9 pl-9 pr-4 text-xs bg-white dark:bg-zinc-900/30 border border-zinc-200 dark:border-zinc-900 hover:border-zinc-300 dark:hover:border-zinc-800 focus:border-violet-500/80 focus:bg-white dark:focus:bg-zinc-900/60 focus:ring-1 focus:ring-violet-500/30 rounded-lg text-zinc-800 dark:text-zinc-200 placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none transition-all duration-200"
+          className="w-full h-9 pl-9 pr-4 text-xs bg-white dark:bg-gray-900/30 border border-gray-200 dark:border-gray-900 hover:border-gray-300 dark:hover:border-gray-800 focus:border-orange-500/80 focus:bg-white dark:focus:bg-gray-900/60 focus:ring-1 focus:ring-orange-500/30 rounded-lg text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-600 dark:placeholder-gray-500 focus:outline-none transition-all duration-200"
         />
       </div>
 
@@ -75,13 +75,13 @@ export default function SkillsControls({
               setSortDropdownOpen(false);
             }}
             className={cn(
-              "flex items-center justify-between gap-2 h-9 px-3 text-xs font-semibold rounded-lg bg-white dark:bg-zinc-900/30 border border-zinc-200 dark:border-zinc-900 hover:border-zinc-300 dark:hover:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-all cursor-pointer",
-              filterDropdownOpen && "border-zinc-300 dark:border-zinc-700 bg-zinc-55 dark:bg-zinc-900/50 text-zinc-950 dark:text-white"
+              "flex items-center justify-between gap-2 h-9 px-3 text-xs font-semibold rounded-lg bg-white dark:bg-gray-900/30 border border-gray-200 dark:border-gray-900 hover:border-gray-300 dark:hover:border-gray-800 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-all cursor-pointer",
+              filterDropdownOpen && "border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 text-gray-950 dark:text-white"
             )}
           >
-            <SlidersHorizontal className="w-3.5 h-3.5 text-zinc-450 dark:text-zinc-500" />
+            <SlidersHorizontal className="w-3.5 h-3.5 text-gray-400 dark:text-gray-600 dark:text-gray-500 dark:text-gray-400" />
             <span>Filter: {filterBy}</span>
-            <ChevronDown className={cn("w-3.5 h-3.5 text-zinc-450 dark:text-zinc-500 transition-transform duration-200", filterDropdownOpen && "rotate-180")} />
+            <ChevronDown className={cn("w-3.5 h-3.5 text-gray-400 dark:text-gray-600 dark:text-gray-500 dark:text-gray-400 transition-transform duration-200", filterDropdownOpen && "rotate-180")} />
           </button>
 
           <AnimatePresence>
@@ -91,7 +91,7 @@ export default function SkillsControls({
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 5 }}
                 transition={{ duration: 0.15 }}
-                className="absolute right-0 mt-1.5 w-48 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-1 shadow-xl z-30"
+                className="absolute right-0 mt-1.5 w-48 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 p-1 shadow-xl z-30"
               >
                 {filterOptions.map((opt) => (
                   <button
@@ -101,12 +101,12 @@ export default function SkillsControls({
                       setFilterDropdownOpen(false);
                     }}
                     className={cn(
-                      "flex items-center justify-between w-full h-8 px-2.5 rounded-md text-left text-xs text-zinc-650 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-all font-medium cursor-pointer",
-                      filterBy === opt && "text-violet-600 dark:text-violet-300 bg-violet-50 dark:bg-violet-500/10 font-semibold"
+                      "flex items-center justify-between w-full h-8 px-2.5 rounded-md text-left text-xs text-gray-600 dark:text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-900 transition-all font-medium cursor-pointer",
+                      filterBy === opt && "text-orange-600 dark:text-orange-300 bg-orange-50 dark:bg-orange-500/10 font-semibold"
                     )}
                   >
                     <span>{opt}</span>
-                    {filterBy === opt && <Check className="w-3.5 h-3.5 text-violet-500 dark:text-violet-400" />}
+                    {filterBy === opt && <Check className="w-3.5 h-3.5 text-orange-500 dark:text-orange-400" />}
                   </button>
                 ))}
               </motion.div>
@@ -122,13 +122,13 @@ export default function SkillsControls({
               setFilterDropdownOpen(false);
             }}
             className={cn(
-              "flex items-center justify-between gap-2 h-9 px-3 text-xs font-semibold rounded-lg bg-white dark:bg-zinc-900/30 border border-zinc-200 dark:border-zinc-900 hover:border-zinc-300 dark:hover:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-all cursor-pointer",
-              sortDropdownOpen && "border-zinc-300 dark:border-zinc-700 bg-zinc-55 dark:bg-zinc-900/50 text-zinc-955 dark:text-white"
+              "flex items-center justify-between gap-2 h-9 px-3 text-xs font-semibold rounded-lg bg-white dark:bg-gray-900/30 border border-gray-200 dark:border-gray-900 hover:border-gray-300 dark:hover:border-gray-800 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-all cursor-pointer",
+              sortDropdownOpen && "border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 text-gray-950 dark:text-white"
             )}
           >
-            <span className="text-zinc-450 dark:text-zinc-500 font-medium">Sort By:</span>
+            <span className="text-gray-400 dark:text-gray-600 dark:text-gray-500 dark:text-gray-400 font-medium">Sort By:</span>
             <span>{sortBy}</span>
-            <ChevronDown className={cn("w-3.5 h-3.5 text-zinc-450 dark:text-zinc-500 transition-transform duration-200", sortDropdownOpen && "rotate-180")} />
+            <ChevronDown className={cn("w-3.5 h-3.5 text-gray-400 dark:text-gray-600 dark:text-gray-500 dark:text-gray-400 transition-transform duration-200", sortDropdownOpen && "rotate-180")} />
           </button>
 
           <AnimatePresence>
@@ -138,7 +138,7 @@ export default function SkillsControls({
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 5 }}
                 transition={{ duration: 0.15 }}
-                className="absolute right-0 mt-1.5 w-44 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-955 p-1 shadow-xl z-30"
+                className="absolute right-0 mt-1.5 w-44 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 p-1 shadow-xl z-30"
               >
                 {sortOptions.map((opt) => (
                   <button
@@ -148,12 +148,12 @@ export default function SkillsControls({
                       setSortDropdownOpen(false);
                     }}
                     className={cn(
-                      "flex items-center justify-between w-full h-8 px-2.5 rounded-md text-left text-xs text-zinc-655 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-all font-medium cursor-pointer",
-                      sortBy === opt && "text-violet-600 dark:text-violet-300 bg-violet-50 dark:bg-violet-500/10 font-semibold"
+                      "flex items-center justify-between w-full h-8 px-2.5 rounded-md text-left text-xs text-gray-600 dark:text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-900 transition-all font-medium cursor-pointer",
+                      sortBy === opt && "text-orange-600 dark:text-orange-300 bg-orange-50 dark:bg-orange-500/10 font-semibold"
                     )}
                   >
                     <span>{opt}</span>
-                    {sortBy === opt && <Check className="w-3.5 h-3.5 text-violet-550 dark:text-violet-400" />}
+                    {sortBy === opt && <Check className="w-3.5 h-3.5 text-orange-500 dark:text-orange-400" />}
                   </button>
                 ))}
               </motion.div>
@@ -162,17 +162,17 @@ export default function SkillsControls({
         </div>
 
         {/* Vertical divider */}
-        <div className="h-5 w-px bg-zinc-200 dark:bg-zinc-900 hidden sm:block" />
+        <div className="h-5 w-px bg-gray-200 dark:bg-gray-900 hidden sm:block" />
 
         {/* Layout Toggle (Grid / List) */}
-        <div className="flex items-center rounded-lg bg-white dark:bg-zinc-900/30 border border-zinc-200 dark:border-zinc-900 p-0.5 select-none">
+        <div className="flex items-center rounded-lg bg-white dark:bg-gray-900/30 border border-gray-200 dark:border-gray-900 p-0.5 select-none">
           <button
             onClick={() => onLayoutChange("grid")}
             className={cn(
               "flex items-center justify-center w-7.5 h-7.5 rounded-md transition-all cursor-pointer",
               layoutMode === "grid"
-                ? "bg-zinc-100 dark:bg-zinc-900 text-violet-600 dark:text-violet-400 border border-zinc-200 dark:border-zinc-850 shadow-inner"
-                : "text-zinc-450 dark:text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
+                ? "bg-gray-100 dark:bg-gray-900 text-orange-600 dark:text-orange-400 border border-gray-200 dark:border-gray-800 shadow-inner"
+                : "text-gray-400 dark:text-gray-600 dark:text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
             )}
             aria-label="Grid layout"
           >
@@ -183,8 +183,8 @@ export default function SkillsControls({
             className={cn(
               "flex items-center justify-center w-7.5 h-7.5 rounded-md transition-all cursor-pointer",
               layoutMode === "list"
-                ? "bg-zinc-100 dark:bg-zinc-900 text-violet-600 dark:text-violet-400 border border-zinc-200 dark:border-zinc-850 shadow-inner"
-                : "text-zinc-450 dark:text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
+                ? "bg-gray-100 dark:bg-gray-900 text-orange-600 dark:text-orange-400 border border-gray-200 dark:border-gray-800 shadow-inner"
+                : "text-gray-400 dark:text-gray-600 dark:text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
             )}
             aria-label="List layout"
           >

@@ -22,6 +22,7 @@ import { triggerIngestionAction } from "@/src/actions/ingestion.actions";
 
 export default function SkillsPage() {
   const [skills, setSkills] = useState<Skill[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [filterBy, setFilterBy] = useState<"All" | "Recently Updated" | "Most Documents" | "Most Chats" | "Pinned">("All");
   const [sortBy, setSortBy] = useState<"Name" | "Last Updated" | "Created Date">("Name");
@@ -31,18 +32,19 @@ export default function SkillsPage() {
   // Load skills from database on mount, auto-seeding if empty
   React.useEffect(() => {
     async function loadSkills() {
+      setLoading(true);
       try {
         const res = await getAllSkillsAction();
         if (res.success && res.data) {
-          const mapped: Skill[] = res.data.map((dbSkill) => ({
+          const mapped: Skill[] = res.data.map((dbSkill: any) => ({
             id: dbSkill.id,
             name: dbSkill.name,
             description: dbSkill.description || "",
             category: dbSkill.category || "General",
             icon: dbSkill.icon || "Brain",
             color: dbSkill.color || "violet",
-            documents: 0,
-            chats: 0,
+            documents: dbSkill._count?.knowledgeFiles ?? 0,
+            chats: dbSkill._count?.chats ?? 0,
             memories: 0,
             storage: "0 KB",
             lastUpdated: "Just now",
@@ -57,6 +59,8 @@ export default function SkillsPage() {
       } catch (err) {
         console.error("Error loading skills from database:", err);
         toast.error("Failed to sync skills with database.");
+      } finally {
+        setLoading(false);
       }
     }
     loadSkills();
@@ -291,6 +295,37 @@ export default function SkillsPage() {
       .sort((a, b) => b.lastUpdatedMs - a.lastUpdatedMs)
       .slice(0, 2);
   }, [skills]);
+
+  if (loading) {
+    return (
+      <div className="space-y-6 md:space-y-8 select-none">
+        <SkillsHeader onCreateClick={() => setCreateModalOpen(true)} />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div
+              key={i}
+              className="rounded-2xl border border-gray-800/60 bg-gray-900/40 p-5 space-y-4 animate-pulse"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-gray-800" />
+                <div className="space-y-2 flex-1">
+                  <div className="h-3.5 bg-gray-800 rounded-md w-3/4" />
+                  <div className="h-2.5 bg-gray-800/60 rounded-md w-1/2" />
+                </div>
+              </div>
+              <div className="h-2.5 bg-gray-800/60 rounded-md w-full" />
+              <div className="h-2.5 bg-gray-800/60 rounded-md w-5/6" />
+              <div className="flex gap-3 pt-1">
+                <div className="h-2 bg-gray-800/40 rounded-md w-12" />
+                <div className="h-2 bg-gray-800/40 rounded-md w-12" />
+                <div className="h-2 bg-gray-800/40 rounded-md w-12" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 md:space-y-8">

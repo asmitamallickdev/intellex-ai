@@ -8,8 +8,15 @@ export class SearchService {
   static async querySemanticIndex(
     query: string,
     skillId: string,
-    limit: number = 5
-  ): Promise<{ chunkId: string; content: string; documentTitle: string; distance: number }[]> {
+    limit: number = 5,
+  ): Promise<
+    {
+      chunkId: string;
+      content: string;
+      documentTitle: string;
+      distance: number;
+    }[]
+  > {
     try {
       // 1. Generate embedding for the user search query
       const embedResponse = await openai.embeddings.create({
@@ -40,7 +47,7 @@ export class SearchService {
          LIMIT $3`,
         vectorStr,
         skillId,
-        limit
+        limit,
       );
 
       return results.map((r) => ({

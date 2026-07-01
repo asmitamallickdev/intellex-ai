@@ -43,7 +43,7 @@ export default function CreateSkillModal({
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
   const [selectedIcon, setSelectedIcon] = useState("Brain");
-  const [selectedColor, setSelectedColor] = useState("violet");
+  const [selectedColor, setSelectedColor] = useState("orange");
   const [tags, setTags] = useState<string[]>([]);
   const [stagedFiles, setStagedFiles] = useState<FilePlaceholder[]>([]);
   const [advancedData, setAdvancedData] = useState<AdvancedSettingsData>({
@@ -163,7 +163,7 @@ export default function CreateSkillModal({
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 15 }}
         transition={{ type: "spring", damping: 26, stiffness: 220 }}
-        className="relative w-full max-w-2xl rounded-2xl border border-zinc-200 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-6 md:p-8 shadow-2xl z-10 overflow-y-auto max-h-[90vh] space-y-6 scrollbar-thin scrollbar-thumb-zinc-300 dark:scrollbar-thumb-zinc-800 scrollbar-track-transparent"
+        className="relative w-full max-w-2xl rounded-2xl border border-gray-200 dark:border-gray-900 bg-white dark:bg-gray-950 p-6 md:p-8 shadow-2xl z-10 overflow-y-auto max-h-[90vh] space-y-6 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-800 scrollbar-track-transparent"
       >
         {/* Header Title block */}
         <ModalHeader onClose={onClose} />
@@ -218,8 +218,8 @@ export default function CreateSkillModal({
 
           {/* Staged files collection list */}
           {stagedFiles.length > 0 && (
-            <div className="space-y-2 mt-2 bg-zinc-50 dark:bg-zinc-955/60 p-3 rounded-xl border border-zinc-200 dark:border-zinc-900/60">
-              <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider block mb-1">
+            <div className="space-y-2 mt-2 bg-gray-50 dark:bg-gray-950/60 p-3 rounded-xl border border-gray-200 dark:border-gray-900/60">
+              <span className="text-[9px] font-bold text-gray-600 dark:text-gray-500 dark:text-gray-400 uppercase tracking-wider block mb-1">
                 Staged Knowledge Documents ({stagedFiles.length})
               </span>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">

@@ -28,12 +28,12 @@ const getFileIconStyles = (ext: string) => {
     return { icon: FileSpreadsheet, colors: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/15" };
   }
   if (["json", "js", "ts", "md"].includes(e)) {
-    return { icon: FileCode, colors: "bg-violet-500/10 text-violet-600 dark:text-violet-400 border-violet-500/15" };
+    return { icon: FileCode, colors: "bg-orange-500/10 text-orange-600 dark:text-orange-400 border-orange-500/15" };
   }
   if (["png", "jpg", "jpeg", "webp"].includes(e)) {
     return { icon: FileImage, colors: "bg-pink-500/10 text-pink-600 dark:text-pink-400 border-pink-500/15" };
   }
-  return { icon: FileArchive, colors: "bg-zinc-100 dark:bg-zinc-800 text-zinc-650 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-700/50" };
+  return { icon: FileArchive, colors: "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-700/50" };
 };
 
 export default function UploadedFileCard({
@@ -43,7 +43,7 @@ export default function UploadedFileCard({
   const { icon: Icon, colors: iconColors } = getFileIconStyles(file.type);
 
   return (
-    <div className="flex items-center justify-between p-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-900 transition-all hover:border-zinc-300 dark:hover:border-zinc-850 select-none">
+    <div className="flex items-center justify-between p-2.5 rounded-xl bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-900 transition-all hover:border-gray-300 dark:hover:border-gray-800 select-none">
       {/* File Info */}
       <div className="flex items-center space-x-2.5 min-w-0 mr-4">
         <div className={cn(
@@ -53,10 +53,10 @@ export default function UploadedFileCard({
           <Icon className="w-3.5 h-3.5" />
         </div>
         <div className="min-w-0 space-y-0.5">
-          <span className="text-xs font-semibold text-zinc-800 dark:text-zinc-300 truncate block max-w-[200px] sm:max-w-xs">
+          <span className="text-xs font-semibold text-gray-800 dark:text-gray-300 truncate block max-w-[200px] sm:max-w-xs">
             {file.name}
           </span>
-          <span className="text-[9px] font-bold text-zinc-500 block uppercase">
+          <span className="text-[9px] font-bold text-gray-500 block uppercase">
             {file.size}
           </span>
         </div>
@@ -66,7 +66,7 @@ export default function UploadedFileCard({
       <button
         type="button"
         onClick={onRemove}
-        className="p-1 rounded-lg text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-350 hover:bg-zinc-100 dark:hover:bg-zinc-900 border border-transparent hover:border-zinc-200 dark:hover:border-zinc-800 transition-all cursor-pointer flex-shrink-0"
+        className="p-1 rounded-lg text-gray-500 hover:text-gray-800 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-900 border border-transparent hover:border-gray-200 dark:hover:border-gray-800 transition-all cursor-pointer flex-shrink-0"
         title="Remove file"
       >
         <X className="w-3.5 h-3.5" />

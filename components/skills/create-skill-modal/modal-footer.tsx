@@ -16,14 +16,14 @@ export default function ModalFooter({
   isLoading,
 }: ModalFooterProps) {
   return (
-    <div className="flex items-center justify-end gap-3 pt-4 border-t border-zinc-200 dark:border-zinc-900/60 mt-6">
+    <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-200 dark:border-gray-900/60 mt-6">
       {/* Cancel Button */}
       <Button
         type="button"
         variant="outline"
         onClick={onCancel}
         disabled={isLoading}
-        className="h-9 px-4 text-xs font-semibold text-zinc-550 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white border-zinc-200 dark:border-zinc-900 hover:border-zinc-300 dark:hover:border-zinc-800 bg-transparent hover:bg-zinc-50 dark:hover:bg-zinc-900/40 rounded-lg cursor-pointer transition-colors disabled:opacity-50 disabled:pointer-events-none"
+        className="h-9 px-4 text-xs font-semibold text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white border-gray-200 dark:border-gray-900 hover:border-gray-300 dark:hover:border-gray-800 bg-transparent hover:bg-gray-50 dark:hover:bg-gray-900/40 rounded-lg cursor-pointer transition-colors disabled:opacity-50 disabled:pointer-events-none"
       >
         Cancel
       </Button>
@@ -32,7 +32,7 @@ export default function ModalFooter({
       <Button
         type="submit"
         disabled={isSubmitDisabled || isLoading}
-        className="h-9 px-4 text-xs font-semibold bg-violet-600 hover:bg-violet-500 disabled:opacity-50 disabled:pointer-events-none text-white rounded-lg cursor-pointer border border-violet-500/25 shadow-[0_0_15px_rgba(139,92,246,0.1)] transition-colors flex items-center justify-center min-w-[100px]"
+        className="h-9 px-4 text-xs font-semibold bg-orange-600 hover:bg-orange-500 disabled:opacity-50 disabled:pointer-events-none text-white rounded-lg cursor-pointer border border-orange-500/25 shadow-[0_0_15px_rgba(234,88,12,0.1)] transition-colors flex items-center justify-center min-w-[100px]"
       >
         {isLoading ? (
           <>

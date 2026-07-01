@@ -35,7 +35,7 @@ export default function FileActionMenu({
     <div ref={containerRef} className="relative flex-shrink-0">
       <button
         onClick={() => setOpen(!open)}
-        className="p-1 rounded-lg text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-350 hover:bg-zinc-100 dark:hover:bg-zinc-900 border border-transparent hover:border-zinc-200 dark:hover:border-zinc-800 transition-colors cursor-pointer"
+        className="p-1 rounded-lg text-gray-500 hover:text-gray-800 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-900 border border-transparent hover:border-gray-200 dark:hover:border-gray-800 transition-colors cursor-pointer"
         aria-label="File options"
       >
         <MoreHorizontal className="w-4 h-4" />
@@ -48,7 +48,7 @@ export default function FileActionMenu({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 5 }}
             transition={{ duration: 0.1 }}
-            className="absolute right-0 mt-1 w-36 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-1 shadow-2xl z-30"
+            className="absolute right-0 mt-1 w-36 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 p-1 shadow-2xl z-30"
           >
             {/* Preview */}
             <button
@@ -56,9 +56,9 @@ export default function FileActionMenu({
                 onPreview();
                 setOpen(false);
               }}
-              className="flex items-center w-full h-7.5 px-2.5 rounded-md text-left text-[11px] text-zinc-650 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors cursor-pointer font-medium"
+              className="flex items-center w-full h-7.5 px-2.5 rounded-md text-left text-[11px] text-gray-600 dark:text-gray-400 hover:text-gray-950 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors cursor-pointer font-medium"
             >
-              <Eye className="w-3.5 h-3.5 mr-2 text-zinc-450 dark:text-zinc-505" />
+              <Eye className="w-3.5 h-3.5 mr-2 text-gray-400 dark:text-gray-500" />
               Preview
             </button>
 
@@ -68,13 +68,13 @@ export default function FileActionMenu({
                 onDownload();
                 setOpen(false);
               }}
-              className="flex items-center w-full h-7.5 px-2.5 rounded-md text-left text-[11px] text-zinc-650 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors cursor-pointer font-medium"
+              className="flex items-center w-full h-7.5 px-2.5 rounded-md text-left text-[11px] text-gray-600 dark:text-gray-400 hover:text-gray-950 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors cursor-pointer font-medium"
             >
-              <Download className="w-3.5 h-3.5 mr-2 text-zinc-450 dark:text-zinc-505" />
+              <Download className="w-3.5 h-3.5 mr-2 text-gray-400 dark:text-gray-500" />
               Download
             </button>
 
-            <div className="border-t border-zinc-100 dark:border-zinc-900 my-1 mx-1" />
+            <div className="border-t border-gray-100 dark:border-gray-900 my-1 mx-1" />
 
             {/* Delete */}
             <button

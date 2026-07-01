@@ -34,22 +34,22 @@ export default function TagInput({ tags, onChange }: TagInputProps) {
 
   return (
     <div className="space-y-2">
-      <label className="text-[10px] font-bold text-zinc-550 dark:text-zinc-400 uppercase tracking-wider block">
+      <label className="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider block">
         Tags
       </label>
 
       {/* Input container with stacked tag pills */}
-      <div className="flex flex-wrap gap-2 p-2 min-h-[44px] bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-900 hover:border-zinc-300 dark:hover:border-zinc-800 rounded-xl focus-within:border-violet-500/80 focus-within:ring-1 focus-within:ring-violet-500/30 transition-all">
+      <div className="flex flex-wrap gap-2 p-2 min-h-[44px] bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-900 hover:border-gray-300 dark:hover:border-gray-800 rounded-xl focus-within:border-orange-500/80 focus-within:ring-1 focus-within:ring-orange-500/30 transition-all">
         {tags.map((tag, idx) => (
           <span
             key={`${tag}-${idx}`}
-            className="inline-flex items-center space-x-1 pl-2.5 pr-1.5 py-0.8 text-[10px] font-semibold bg-violet-50 dark:bg-violet-500/10 text-violet-600 dark:text-violet-300 rounded-full border border-violet-200 dark:border-violet-500/20"
+            className="inline-flex items-center space-x-1 pl-2.5 pr-1.5 py-0.8 text-[10px] font-semibold bg-orange-50 dark:bg-orange-500/10 text-orange-600 dark:text-orange-300 rounded-full border border-orange-200 dark:border-orange-500/20"
           >
             <span>{tag}</span>
             <button
               type="button"
               onClick={() => removeTag(idx)}
-              className="p-0.5 rounded-full hover:bg-violet-100 dark:hover:bg-violet-500/20 text-violet-500 dark:text-violet-400 hover:text-violet-750 dark:hover:text-violet-200 transition-colors cursor-pointer"
+              className="p-0.5 rounded-full hover:bg-orange-100 dark:hover:bg-orange-500/20 text-orange-500 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-200 transition-colors cursor-pointer"
             >
               <X className="w-2.5 h-2.5" />
             </button>
@@ -62,13 +62,13 @@ export default function TagInput({ tags, onChange }: TagInputProps) {
           onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder={tags.length === 0 ? "Type tag & hit Enter..." : "Add tag..."}
-          className="flex-1 bg-transparent text-xs text-zinc-800 dark:text-zinc-200 placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none min-w-[120px] h-6"
+          className="flex-1 bg-transparent text-xs text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-600 focus:outline-none min-w-[120px] h-6"
         />
       </div>
 
       {/* Suggested Quick-add tags */}
-      <div className="flex flex-wrap items-center gap-1.5 pt-1 text-[10px] text-zinc-500 font-semibold tracking-wide uppercase">
-        <span className="text-zinc-400 dark:text-zinc-600">Quick Add:</span>
+      <div className="flex flex-wrap items-center gap-1.5 pt-1 text-[10px] text-gray-500 font-semibold tracking-wide uppercase">
+        <span className="text-gray-400 dark:text-gray-600">Quick Add:</span>
         {modalSuggestedTags.map((sTag) => {
           const isAdded = tags.includes(sTag);
           return (
@@ -80,11 +80,11 @@ export default function TagInput({ tags, onChange }: TagInputProps) {
               className={cn(
                 "h-5 px-2 rounded border transition-colors flex items-center gap-0.5 cursor-pointer text-[9px] font-bold uppercase tracking-wider",
                 isAdded
-                  ? "bg-zinc-100 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-900 text-zinc-400 dark:text-zinc-650 opacity-50 cursor-not-allowed"
-                  : "bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-900 hover:border-zinc-300 dark:hover:border-zinc-800 text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-zinc-200"
+                  ? "bg-gray-100 dark:bg-gray-900 border-gray-200 dark:border-gray-900 text-gray-400 dark:text-gray-600 opacity-50 cursor-not-allowed"
+                  : "bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-900 hover:border-gray-300 dark:hover:border-gray-800 text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200"
               )}
             >
-              <Plus className="w-2 h-2 text-zinc-400 dark:text-zinc-505" />
+              <Plus className="w-2 h-2 text-gray-400 dark:text-gray-500" />
               {sTag}
             </button>
           );

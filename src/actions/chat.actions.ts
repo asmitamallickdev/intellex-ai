@@ -26,7 +26,7 @@ export async function createChatAction(
     }
 
     const chat = await ChatService.createChat(validated.data.skillId, validated.data.title);
-    revalidatePath("/chats/" + validated.data.skillId);
+    revalidatePath("/chat/" + validated.data.skillId);
     return { success: true, data: chat, message: "Chat created successfully.", statusCode: 201 };
   } catch (err: any) {
     console.error("[Chat Actions] Failed to create chat:", err);
@@ -74,7 +74,7 @@ export async function renameChatAction(id: string, title: string): Promise<ChatR
     }
 
     const chat = await ChatService.renameChat(id, validated.data.title);
-    revalidatePath("/chats");
+    revalidatePath("/chat");
     return { success: true, data: chat, message: "Chat renamed successfully.", statusCode: 200 };
   } catch (err: any) {
     console.error(`[Chat Actions] Failed to rename chat ${id}:`, err);
@@ -89,7 +89,7 @@ export async function deleteChatAction(id: string): Promise<ChatResponse<null>> 
   try {
     if (!id) return { success: false, error: "Chat ID is required.", statusCode: 400 };
     await ChatService.deleteChat(id);
-    revalidatePath("/chats");
+    revalidatePath("/chat");
     return { success: true, message: "Chat session deleted.", statusCode: 200 };
   } catch (err: any) {
     console.error(`[Chat Actions] Failed to delete chat ${id}:`, err);
@@ -109,7 +109,7 @@ export async function sendMessageAction(input: SendMessageInput): Promise<ChatRe
     }
 
     const message = await ChatService.sendMessage(validated.data);
-    revalidatePath("/chats");
+    revalidatePath("/chat");
     return { success: true, data: message, message: "AI response generated.", statusCode: 200 };
   } catch (err: any) {
     console.error("[Chat Actions] Error sending message:", err);
@@ -127,7 +127,7 @@ export async function regenerateResponseAction(
   try {
     if (!chatId) return { success: false, error: "Chat ID is required.", statusCode: 400 };
     const message = await ChatService.regenerateResponse(chatId, options);
-    revalidatePath("/chats");
+    revalidatePath("/chat");
     return { success: true, data: message, message: "AI response regenerated.", statusCode: 200 };
   } catch (err: any) {
     console.error(`[Chat Actions] Error regenerating response in chat ${chatId}:`, err);

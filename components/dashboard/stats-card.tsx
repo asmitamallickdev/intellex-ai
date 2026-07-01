@@ -26,12 +26,12 @@ export default function StatsCard({
     <motion.div
       whileHover={{ y: -2 }}
       transition={{ duration: 0.2 }}
-      className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-900 bg-white dark:bg-zinc-900/10 backdrop-blur-sm flex flex-col justify-between min-h-[110px] space-y-3 group hover:border-zinc-350 dark:hover:border-zinc-800 transition-colors"
+      className="p-4 rounded-xl border border-gray-200 dark:border-gray-900 bg-white dark:bg-gray-900/10 backdrop-blur-sm flex flex-col justify-between min-h-[110px] space-y-3 group hover:border-gray-300 dark:hover:border-gray-800 transition-colors"
     >
       {/* Card Header: Icon & Badge */}
       <div className="flex items-start justify-between">
         {/* Icon container */}
-        <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-violet-500/10 border border-violet-500/10 text-violet-600 dark:text-violet-400 group-hover:bg-violet-500/20 dark:group-hover:bg-violet-500/15 group-hover:text-violet-700 dark:group-hover:text-violet-300 transition-colors duration-300 flex-shrink-0">
+        <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-orange-500/10 border border-orange-500/10 text-orange-600 dark:text-orange-400 group-hover:bg-orange-500/20 dark:group-hover:bg-orange-500/15 group-hover:text-orange-700 dark:group-hover:text-orange-300 transition-colors duration-300 flex-shrink-0">
           <Icon className="w-4 h-4" />
         </div>
 
@@ -43,7 +43,7 @@ export default function StatsCard({
               ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/10"
               : trendType === "stable"
               ? "bg-sky-500/10 text-sky-600 dark:text-sky-400 border-sky-500/10"
-              : "bg-zinc-100 dark:bg-zinc-800/80 text-zinc-650 dark:text-zinc-400 border-zinc-200 dark:border-zinc-700/40"
+              : "bg-gray-100 dark:bg-gray-800/80 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-700/40"
           )}
         >
           {trend}
@@ -52,10 +52,10 @@ export default function StatsCard({
 
       {/* Card Body: Label & Value */}
       <div className="space-y-0.5">
-        <span className="text-[10px] font-semibold text-zinc-550 dark:text-zinc-500 uppercase tracking-wider block">
+        <span className="text-[10px] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider block">
           {label}
         </span>
-        <span className="text-2xl font-bold text-zinc-900 dark:text-white tracking-tight block">
+        <span className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight block">
           {value}
         </span>
       </div>
