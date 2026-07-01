@@ -1,0 +1,264 @@
+"use client";
+
+import React, { useState, useMemo } from "react";
+import { mockRepositories, SkillRepository } from "@/lib/knowledge-mock-data";
+import RepositoryRow from "./repository-row";
+import HealthCard from "./health-card";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { 
+  FolderPlus, 
+  CloudDownload, 
+  Upload, 
+  Search, 
+  Library, 
+  FileText, 
+  HardDrive, 
+  Sparkles, 
+  RotateCw,
+  Plus
+} from "lucide-react";
+import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
+
+export default function KnowledgePage() {
+  const router = useRouter();
+  const [repositories, setRepositories] = useState<SkillRepository[]>(mockRepositories);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Handler to delete document from specific repository
+  const handleDeleteDocument = (repoId: string, docId: string) => {
+    setRepositories((prev) =>
+      prev.map((repo) => {
+        if (repo.id === repoId) {
+          const updatedDocs = repo.documents.filter((doc) => doc.id !== docId);
+          return {
+            ...repo,
+            docsCount: updatedDocs.length,
+            documents: updatedDocs,
+          };
+        }
+        return repo;
+      })
+    );
+  };
+
+  // Handler to create a new folder repository
+  const handleCreateFolder = () => {
+    const name = window.prompt("Enter repository name:");
+    if (!name || !name.trim()) return;
+
+    const description = window.prompt("Enter description:") || "No description provided.";
+    
+    const newRepo: SkillRepository = {
+      id: `repo-${Date.now()}`,
+      name: name.trim(),
+      description,
+      badgeText: "NEW",
+      badgeType: "public",
+      docsCount: 0,
+      chatsCount: 0,
+      progressPercent: 100,
+      iconName: "Folder",
+      accentColor: "text-zinc-500 bg-zinc-500/10 border-zinc-500/20",
+      documents: [],
+    };
+
+    setRepositories((prev) => [newRepo, ...prev]);
+    toast.success(`Successfully created repository "${name}"`);
+  };
+
+  const handleImport = () => {
+    toast.success("Import wizard successfully initialized.");
+  };
+
+  const handleUploadFilesClick = () => {
+    router.push("/upload");
+  };
+
+  // Compute stats
+  const totalSkills = repositories.length;
+  const totalFiles = useMemo(() => {
+    return repositories.reduce((sum, repo) => sum + repo.docsCount, 0);
+  }, [repositories]);
+
+  // Filter repositories based on query
+  const filteredRepositories = useMemo(() => {
+    return repositories.filter((repo) => {
+      const matchesName = repo.name.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesDesc = repo.description.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesDocs = repo.documents.some((doc) =>
+        doc.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      return matchesName || matchesDesc || matchesDocs;
+    });
+  }, [repositories, searchQuery]);
+
+  return (
+    <div className="space-y-6 md:space-y-8 pb-12">
+      {/* Header section with action buttons */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-zinc-200 dark:border-zinc-900/60 pb-6">
+        <div className="space-y-1">
+          <motion.h2
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white tracking-tight"
+          >
+            Knowledge Base
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.1 }}
+            className="text-xs md:text-sm text-zinc-500 dark:text-zinc-400 max-w-3xl leading-relaxed font-medium"
+          >
+            Manage and organize documents across all Skills.
+          </motion.p>
+        </div>
+
+        {/* Top Header Buttons */}
+        <div className="flex items-center gap-2 flex-wrap md:flex-nowrap">
+          {/* Create Folder button */}
+          <button
+            onClick={handleCreateFolder}
+            className="flex items-center justify-center gap-1.5 h-9 px-4 text-xs font-semibold rounded-lg bg-zinc-50 hover:bg-zinc-100 dark:bg-zinc-900 dark:hover:bg-zinc-855 border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white transition-all cursor-pointer shadow-xs"
+          >
+            <FolderPlus className="w-4 h-4 text-zinc-500 dark:text-zinc-400" />
+            Create Folder
+          </button>
+
+          {/* Import button */}
+          <button
+            onClick={handleImport}
+            className="flex items-center justify-center gap-1.5 h-9 px-4 text-xs font-semibold rounded-lg bg-zinc-50 hover:bg-zinc-100 dark:bg-zinc-900 dark:hover:bg-zinc-855 border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white transition-all cursor-pointer shadow-xs"
+          >
+            <CloudDownload className="w-4 h-4 text-zinc-500 dark:text-zinc-400" />
+            Import
+          </button>
+
+          {/* Upload Files primary button */}
+          <button
+            onClick={handleUploadFilesClick}
+            className="flex items-center justify-center gap-1.5 h-9 px-4 text-xs font-semibold rounded-lg bg-violet-650 hover:bg-violet-600 dark:bg-violet-600 dark:hover:bg-violet-500 text-white border border-violet-500/25 shadow-[0_0_15px_rgba(139,92,246,0.1)] transition-all cursor-pointer hover:scale-101"
+          >
+            <Upload className="w-4 h-4" />
+            Upload Files
+          </button>
+        </div>
+      </div>
+
+      {/* Stats cards section */}
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+        {/* Stat 1: Total Skills */}
+        <div className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-900 bg-white dark:bg-zinc-900/10 backdrop-blur-xs flex flex-col justify-between h-24">
+          <div className="flex items-center justify-between text-zinc-400 dark:text-zinc-500">
+            <Library className="w-4.5 h-4.5" />
+            <span className="text-[9px] font-bold uppercase tracking-wider">Total</span>
+          </div>
+          <div className="space-y-0.5">
+            <span className="text-xl font-bold text-zinc-800 dark:text-zinc-200">{totalSkills}</span>
+            <p className="text-[10px] text-zinc-500 font-semibold block">Active Skills</p>
+          </div>
+        </div>
+
+        {/* Stat 2: Total Files */}
+        <div className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-900 bg-white dark:bg-zinc-900/10 backdrop-blur-xs flex flex-col justify-between h-24">
+          <div className="flex items-center justify-between text-zinc-400 dark:text-zinc-500">
+            <FileText className="w-4.5 h-4.5" />
+            <span className="text-[9px] font-bold uppercase tracking-wider">Documents</span>
+          </div>
+          <div className="space-y-0.5">
+            <span className="text-xl font-bold text-zinc-800 dark:text-zinc-200">{totalFiles}</span>
+            <p className="text-[10px] text-zinc-500 font-semibold block">Total Files</p>
+          </div>
+        </div>
+
+        {/* Stat 3: Capacity */}
+        <div className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-900 bg-white dark:bg-zinc-900/10 backdrop-blur-xs flex flex-col justify-between h-24">
+          <div className="flex items-center justify-between text-zinc-400 dark:text-zinc-500">
+            <HardDrive className="w-4.5 h-4.5" />
+            <span className="text-[9px] font-bold uppercase tracking-wider">Capacity</span>
+          </div>
+          <div className="space-y-0.5">
+            <span className="text-xl font-bold text-zinc-800 dark:text-zinc-200">14.2</span>
+            <p className="text-[10px] text-zinc-500 font-semibold block">GB Used</p>
+          </div>
+        </div>
+
+        {/* Stat 4: Efficiency */}
+        <div className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-900 bg-white dark:bg-zinc-900/10 backdrop-blur-xs flex flex-col justify-between h-24">
+          <div className="flex items-center justify-between text-zinc-400 dark:text-zinc-500">
+            <Sparkles className="w-4.5 h-4.5" />
+            <span className="text-[9px] font-bold uppercase tracking-wider">Efficiency</span>
+          </div>
+          <div className="space-y-0.5">
+            <span className="text-xl font-bold text-zinc-800 dark:text-zinc-200">98%</span>
+            <p className="text-[10px] text-zinc-500 font-semibold block">Embedded Docs</p>
+          </div>
+        </div>
+
+        {/* Stat 5: Pending (Highlighted Card) */}
+        <div className="p-4 rounded-xl bg-violet-650 dark:bg-violet-600 border border-violet-500 shadow-md flex flex-col justify-between h-24 text-white col-span-2 md:col-span-1">
+          <div className="flex items-center justify-between text-violet-200">
+            <RotateCw className="w-4.5 h-4.5 animate-spin-slow" />
+            <span className="text-[9px] font-bold uppercase tracking-wider">Pending</span>
+          </div>
+          <div className="space-y-0.5">
+            <span className="text-xl font-extrabold">3</span>
+            <p className="text-[10px] text-violet-100 font-semibold block">In Processing</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content: 2 Column Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-10 gap-6 lg:gap-8 items-start">
+        
+        {/* Left Column (Skill Repositories) */}
+        <div className="lg:col-span-7 space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <h3 className="text-base font-bold text-zinc-850 dark:text-zinc-200 tracking-tight">
+              Skill Repositories
+            </h3>
+
+            {/* Filter/Search Bar */}
+            <div className="relative w-full sm:w-64 group">
+              <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+                <Search className="h-4 w-4 text-zinc-400 dark:text-zinc-505 group-focus-within:text-violet-555 dark:group-focus-within:text-violet-400 transition-colors duration-200" />
+              </div>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search files or repos..."
+                className="w-full h-8.5 pl-9 pr-4 text-xs bg-white dark:bg-zinc-900/30 border border-zinc-200 dark:border-zinc-900 hover:border-zinc-300 dark:hover:border-zinc-800 focus:border-violet-500/80 focus:bg-white dark:focus:bg-zinc-900/60 focus:ring-1 focus:ring-violet-500/30 rounded-lg text-zinc-800 dark:text-zinc-200 placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none transition-all duration-200 shadow-2xs"
+              />
+            </div>
+          </div>
+
+          {/* Repository lists */}
+          <div className="space-y-4">
+            {filteredRepositories.map((repo) => (
+              <RepositoryRow
+                key={repo.id}
+                repository={repo}
+                onDeleteDocument={handleDeleteDocument}
+              />
+            ))}
+
+            {filteredRepositories.length === 0 && (
+              <div className="text-center py-12 border border-dashed border-zinc-200 dark:border-zinc-900 rounded-xl bg-white dark:bg-zinc-900/10">
+                <p className="text-xs text-zinc-500 font-semibold">No repositories or files found matching query.</p>
+                <p className="text-[10px] text-zinc-450 dark:text-zinc-650 font-medium mt-1">Try resetting search string or creating a new folder.</p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Right Column (Health Dashboard) */}
+        <div className="lg:col-span-3 space-y-6">
+          <HealthCard />
+        </div>
+      </div>
+    </div>
+  );
+}

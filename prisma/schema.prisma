@@ -1,0 +1,227 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  extensions = [pgvector(map: "vector")]
+}
+
+/// ==========================================
+/// ENUMS
+/// ==========================================
+
+/// Defines authorization privilege levels within the platform.
+enum UserRole {
+  USER
+  ADMIN
+}
+
+/// Sets visibility scope for AI Skills.
+enum SkillVisibility {
+  PRIVATE
+  SHARED
+}
+
+/// Tracks the pipeline processing status for uploaded files.
+enum KnowledgeFileStatus {
+  UPLOADING
+  PROCESSING
+  EMBEDDING
+  READY
+  FAILED
+}
+
+/// Message sender identity role.
+enum MessageRole {
+  SYSTEM
+  USER
+  ASSISTANT
+}
+
+/// Importance priority level for stored memories.
+enum MemoryImportance {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+/// ==========================================
+/// MODELS
+/// ==========================================
+
+/// User entity representing platform users and account configuration settings.
+model User {
+  id           String    @id @default(uuid()) @db.Uuid
+  name         String?
+  email        String    @unique
+  passwordHash String
+  image        String?
+  role         UserRole  @default(USER)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  skills    Skill[]
+  chats     Chat[]
+  memories  Memory[]
+
+  @@map("users")
+}
+
+/// Custom AI knowledge workspace configuration representing an AI Skill agent.
+model Skill {
+  id          String          @id @default(uuid()) @db.Uuid
+  userId      String          @db.Uuid
+  name        String
+  description String?
+  icon        String?
+  color       String?
+  category    String?
+  visibility  SkillVisibility @default(PRIVATE)
+  isPinned    Boolean         @default(false)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  knowledgeFiles KnowledgeFile[]
+  chats          Chat[]
+  memories       Memory[]
+
+  @@index([userId])
+  @@index([createdAt])
+  @@map("skills")
+}
+
+/// Raw file entity representing documents uploaded to a specific Skill library.
+model KnowledgeFile {
+  id           String              @id @default(uuid()) @db.Uuid
+  skillId      String              @db.Uuid
+  filename     String
+  originalName String
+  mimeType     String
+  extension    String
+  size         Int
+  storageUrl   String
+  status       KnowledgeFileStatus @default(UPLOADING)
+  uploadedAt   DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+
+  skill    Skill     @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  document Document?
+
+  @@index([skillId])
+  @@index([status])
+  @@index([uploadedAt])
+  @@map("knowledge_files")
+}
+
+/// Structured document wrapper matching the parent uploaded knowledge file.
+model Document {
+  id              String   @id @default(uuid()) @db.Uuid
+  knowledgeFileId String   @unique @db.Uuid
+  title           String
+  summary         String?  @db.Text
+  pageCount       Int?
+  language        String?  @default("en")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  knowledgeFile KnowledgeFile @relation(fields: [knowledgeFileId], references: [id], onDelete: Cascade)
+  chunks        Chunk[]
+
+  @@index([knowledgeFileId])
+  @@index([createdAt])
+  @@map("documents")
+}
+
+/// Parsed segment of text content (chunk) indexed with token count for vector similarity search.
+model Chunk {
+  id                  String    @id @default(uuid()) @db.Uuid
+  documentId          String    @db.Uuid
+  chunkIndex          Int
+  content             String    @db.Text
+  tokenCount          Int
+  embeddingId         String?
+  embedding           Unsupported("vector(1536)")?
+  embeddingStatus     String?
+  embeddingModel      String?
+  embeddingDimensions Int?
+  embeddedAt          DateTime?
+  lastEmbeddedAt      DateTime?
+  metadata            Json?     @default("{}")
+  createdAt           DateTime  @default(now())
+
+  document Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  @@index([documentId])
+  @@index([embeddingStatus])
+  @@index([createdAt])
+  @@map("chunks")
+}
+
+/// Chat thread session bound to a specific custom AI Skill context workspace.
+model Chat {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @db.Uuid
+  skillId   String   @db.Uuid
+  title     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  skill    Skill     @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  messages Message[]
+
+  @@index([userId])
+  @@index([skillId])
+  @@index([createdAt])
+  @@map("chats")
+}
+
+/// Individual query / response record inside a chat session conversation logs.
+model Message {
+  id         String      @id @default(uuid()) @db.Uuid
+  chatId     String      @db.Uuid
+  role       MessageRole
+  content    String      @db.Text
+  tokenUsage Int?
+  metadata   Json?       @default("{}")
+  createdAt  DateTime    @default(now())
+
+  chat Chat @relation(fields: [chatId], references: [id], onDelete: Cascade)
+
+  @@index([chatId])
+  @@index([createdAt])
+  @@map("messages")
+}
+
+/// Persistent memory note summary extracted from user sessions context workspace.
+model Memory {
+  id             String           @id @default(uuid()) @db.Uuid
+  userId         String           @db.Uuid
+  skillId        String           @db.Uuid
+  title          String
+  content        String           @db.Text
+  importance     MemoryImportance @default(MEDIUM)
+  confidence     Float?           @default(1.0)
+  category       String?          @default("General")
+  source         String?
+  sourceChatId   String?
+  sourceMessageId String?
+  lastAccessedAt DateTime?        @default(now())
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  skill Skill @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([skillId])
+  @@index([createdAt])
+  @@map("memories")
+}
