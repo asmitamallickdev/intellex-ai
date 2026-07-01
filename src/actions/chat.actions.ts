@@ -26,7 +26,7 @@ export async function createChatAction(
     }
 
     const chat = await ChatService.createChat(validated.data.skillId, validated.data.title);
-    revalidatePath("/chats");
+    revalidatePath("/chats/" + validated.data.skillId);
     return { success: true, data: chat, message: "Chat created successfully.", statusCode: 201 };
   } catch (err: any) {
     console.error("[Chat Actions] Failed to create chat:", err);

@@ -43,7 +43,7 @@ export const sidebarNavItems: NavItem[] = [
   { label: "Dashboard", href: "/", iconName: "LayoutDashboard" },
   { label: "Skills", href: "/skills", iconName: "Wrench", badge: "New" },
   { label: "Knowledge Base", href: "/knowledge", iconName: "Database" },
-  { label: "Chats", href: "/chats", iconName: "MessageSquare" },
+  { label: "Chats", href: "/skills", iconName: "MessageSquare" },
   { label: "Memory", href: "#", iconName: "Brain" },
   { label: "Search", href: "#", iconName: "Search" },
 ];

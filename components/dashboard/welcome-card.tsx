@@ -56,7 +56,7 @@ export default function WelcomeCard() {
           </Button>
           
           <Button variant="outline" asChild className="h-8.5 text-zinc-700 hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-white border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 bg-white hover:bg-zinc-50 dark:bg-zinc-900/40 dark:hover:bg-zinc-900/60 rounded-lg px-4 text-xs font-semibold cursor-pointer transition-all">
-            <Link href="/chats">
+            <Link href="/skills">
               <MessageSquare className="w-3.5 h-3.5 mr-1.5 text-zinc-500 dark:text-zinc-400" />
               New Chat
             </Link>

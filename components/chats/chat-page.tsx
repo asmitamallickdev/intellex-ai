@@ -1,15 +1,16 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import EmptyChatState from "./empty-chat-state";
 import Conversation from "./conversation";
 import ChatInput from "./chat-input";
 import KnowledgeContextPanel from "./knowledge-context-panel";
 import { CitationSource } from "@/lib/chats-mock-data";
 import { toast } from "sonner";
-import { BookOpen, Database, MessageSquarePlus, Trash2 } from "lucide-react";
+import { BookOpen, MessageSquarePlus, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useSearchParams } from "next/navigation";
+import { useChat } from "@ai-sdk/react";
+import { DefaultChatTransport } from "ai";
 import { 
   getChatsBySkillAction, 
   getChatMessagesAction, 
@@ -25,93 +26,82 @@ export interface Message {
   citations?: CitationSource[];
 }
 
-export default function ChatPage() {
-  const searchParams = useSearchParams();
-  const skillId = searchParams.get("skillId");
+export default function ChatPage({ skillId }: { skillId: string }) {
 
   const [activeChatId, setActiveChatId] = useState<string | null>(null);
-  const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState("");
-  const [isThinking, setIsThinking] = useState(false);
-  const [isStreaming, setIsStreaming] = useState(false);
   const [contextLoaded, setContextLoaded] = useState(false);
   const [activeCitations, setActiveCitations] = useState<CitationSource[]>([]);
-  
-  // Panel toggles for responsive behaviors
   const [showRightPanel, setShowRightPanel] = useState(true);
 
   const conversationEndRef = useRef<HTMLDivElement>(null);
 
-  // Scroll to bottom on new messages
-  useEffect(() => {
-    conversationEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, isThinking]);
+  const {
+    messages: aiMessages,
+    status,
+    sendMessage,
+    regenerate,
+    setMessages: setAiMessages,
+  } = useChat({
+    transport: new DefaultChatTransport({
+      body: { skillId },
+    }),
+    onError: (err) => {
+      toast.error(err.message);
+    },
+  });
+
+  const isThinking = status === "submitted" || status === "streaming";
+  const isStreaming = status === "streaming";
 
   useEffect(() => {
+    conversationEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [aiMessages, isThinking]);
+
+  useEffect(() => {
+    let cancelled = false;
+
     async function loadWorkspaceChat() {
       const currentSkillId = skillId;
       if (!currentSkillId) return;
 
-      setIsThinking(true);
       try {
         const listRes = await getChatsBySkillAction(currentSkillId);
+        if (cancelled) return;
+
         if (listRes.success && listRes.data && listRes.data.length > 0) {
-          // Select existing chat thread
           const chat = listRes.data[0];
           setActiveChatId(chat.id);
-          
-          // Load messages history
+
           const msgRes = await getChatMessagesAction(chat.id);
+          if (cancelled) return;
+
           if (msgRes.success && msgRes.data) {
-            const mapped: Message[] = msgRes.data.map((msg) => {
-              const meta = msg.metadata as any;
-              const mappedCites = meta?.citations?.map((c: any) => ({
-                id: `${c.documentId}-${c.chunkIndex}`,
-                type: "document" as const,
-                title: c.documentTitle,
-                location: c.originalFilename,
-                confidence: Math.round(c.similarityScore * 100),
-                content: c.content,
-              })) || [];
+            const uiMessages = msgRes.data.map((msg) => ({
+              id: msg.id,
+              role: msg.role.toLowerCase() === "user" ? "user" as const : "assistant" as const,
+              parts: [{ type: "text" as const, text: msg.content }] as any,
+              createdAt: new Date(msg.createdAt),
+            }));
 
-              return {
-                id: msg.id,
-                sender: msg.role.toLowerCase() === "user" ? "user" : "assistant",
-                text: msg.content,
-                timestamp: new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-                citations: mappedCites.length > 0 ? mappedCites : undefined,
-              };
-            });
-
-            setMessages(mapped);
-
-            // Set context sidebar to show last assistant citations if any
-            const lastAssistantMsg = [...mapped].reverse().find(m => m.sender === "assistant" && m.citations);
-            if (lastAssistantMsg && lastAssistantMsg.citations) {
-              setActiveCitations(lastAssistantMsg.citations);
-              setContextLoaded(true);
-            }
+            setAiMessages(uiMessages as any);
           }
         } else {
-          // Create a new chat session automatically for this skill
-          const createRes = await createChatAction(skillId, "Workspace Discussion");
-          if (createRes.success && createRes.data) {
+          const createRes = await createChatAction(currentSkillId, "Workspace Discussion");
+          if (!cancelled && createRes.success && createRes.data) {
             setActiveChatId(createRes.data.id);
-            setMessages([]);
           }
         }
       } catch (err) {
-        console.error("Failed to initialize space session chats:", err);
-        toast.error("Failed to load chat history.");
-      } finally {
-        setIsThinking(false);
+        console.error("Failed to initialize workspace chat:", err);
+        if (!cancelled) toast.error("Failed to load chat history.");
       }
     }
 
     loadWorkspaceChat();
+    return () => { cancelled = true; };
   }, [skillId]);
 
-  // Listen for "+ New Chat" event from the global sidebar
   useEffect(() => {
     const handleNewChatEvent = () => {
       handleNewChat();
@@ -121,13 +111,10 @@ export default function ChatPage() {
   }, [skillId]);
 
   const handleNewChat = async () => {
-    setMessages([]);
-    setInputText("");
-    setIsThinking(false);
-    setIsStreaming(false);
+    setAiMessages([]);
     setContextLoaded(false);
     setActiveCitations([]);
-    
+
     const currentSkillId = skillId;
     if (currentSkillId) {
       try {
@@ -142,141 +129,36 @@ export default function ChatPage() {
     }
   };
 
-  const handleSendMessage = async (textToSend: string) => {
+  const handleSendMessage = useCallback((textToSend: string) => {
     if (!textToSend.trim() || isStreaming || isThinking) return;
-    if (!activeChatId) {
-      toast.error("No active chat thread session initiated.");
-      return;
-    }
-
-    // Add User Message
-    const userMsg: Message = {
-      id: `msg-user-${Date.now()}`,
-      sender: "user",
-      text: textToSend,
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-    };
-
-    setMessages((prev) => [...prev, userMsg]);
     setInputText("");
-    setIsThinking(true);
+    sendMessage({ text: textToSend });
+  }, [isStreaming, isThinking, sendMessage]);
 
-    const assistantMsgId = `msg-ai-${Date.now()}`;
-    const assistantMsg: Message = {
-      id: assistantMsgId,
-      sender: "assistant",
-      text: "",
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+  const handleRegenerate = useCallback((id: string) => {
+    regenerate({ messageId: id });
+  }, [regenerate]);
+
+  const messages: Message[] = aiMessages.map((msg) => {
+    const textPart = (msg.parts ?? []).find((p) => p.type === "text") as { text: string } | undefined;
+    return {
+      id: msg.id,
+      sender: msg.role === "user" ? "user" : "assistant",
+      text: textPart?.text ?? "",
+      timestamp: (msg as any).createdAt
+        ? new Date((msg as any).createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+        : new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
     };
-
-    try {
-      // Connect to Next.js API streaming Route Handler
-      const response = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          chatId: activeChatId,
-          content: textToSend,
-          maxChunks: 5,
-          maxHistory: 10,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Failed to establish connection: ${response.statusText}`);
-      }
-
-      setIsThinking(false);
-      setIsStreaming(true);
-      
-      setMessages((prev) => [...prev, assistantMsg]);
-
-      const reader = response.body?.getReader();
-      if (!reader) throw new Error("No reader stream available on response body.");
-
-      const decoder = new TextDecoder();
-      let assistantReply = "";
-
-      while (true) {
-        const { value, done } = await reader.read();
-        if (done) break;
-
-        const rawText = decoder.decode(value);
-        const lines = rawText.split("\n\n");
-
-        for (const line of lines) {
-          if (!line.startsWith("data: ")) continue;
-          const sseData = line.substring(6).trim();
-
-          if (sseData === "[DONE]") {
-            break;
-          }
-
-          try {
-            const parsed = JSON.parse(sseData);
-            if (parsed.type === "text") {
-              assistantReply += parsed.content;
-              setMessages((prev) =>
-                prev.map((m) => (m.id === assistantMsgId ? { ...m, text: assistantReply } : m))
-              );
-            } else if (parsed.type === "metadata") {
-              // Convert pgvector citation objects to CitationSource layout
-              const mappedCites: CitationSource[] = parsed.payload.citations?.map((c: any) => ({
-                id: `${c.documentId}-${c.chunkIndex}`,
-                type: "document" as const,
-                title: c.documentTitle,
-                location: c.originalFilename,
-                confidence: Math.round(c.similarityScore * 100),
-                content: c.content,
-              })) || [];
-
-              setActiveCitations(mappedCites);
-              setContextLoaded(mappedCites.length > 0);
-
-              // Update the assistant message in conversation UI with citation markers
-              setMessages((prev) =>
-                prev.map((m) => (m.id === assistantMsgId ? { ...m, citations: mappedCites } : m))
-              );
-            } else if (parsed.type === "error") {
-              toast.error(parsed.error);
-            }
-          } catch (jsonErr) {
-            // Ignore incomplete JSON stream lines
-          }
-        }
-      }
-
-      toast.success("AI Insights generated successfully.");
-    } catch (err: any) {
-      console.error("[Chat UI] Streaming session error:", err);
-      setIsThinking(false);
-      setIsStreaming(false);
-      toast.error("Error communicating with AI assistant: " + (err.message || String(err)));
-    } finally {
-      setIsStreaming(false);
-    }
-  };
-
-  const handleRegenerate = (id: string) => {
-    const assistantIndex = messages.findIndex((m) => m.id === id);
-    if (assistantIndex <= 0) return;
-    const prevUserMsg = messages[assistantIndex - 1];
-    if (prevUserMsg.sender !== "user") return;
-
-    setMessages((prev) => prev.slice(0, assistantIndex));
-    handleSendMessage(prevUserMsg.text);
-  };
+  });
 
   return (
     <div className="flex h-[calc(100vh-3.5rem)] w-full overflow-hidden text-zinc-800 dark:text-zinc-100 font-sans relative -m-4 md:-m-6 lg:-m-8">
-      {/* Main chat column (Left/Center) */}
       <div className="flex-1 flex flex-col h-full bg-zinc-50/20 dark:bg-zinc-955/10 relative min-w-0 border-r border-zinc-200 dark:border-zinc-900/60">
         
-        {/* Local Sticky Header */}
         <header className="flex h-14 items-center justify-between px-6 border-b border-zinc-200 dark:border-zinc-900/80 bg-white/80 dark:bg-zinc-950/40 backdrop-blur-md z-10 flex-shrink-0">
           <div className="flex items-center space-x-3.5">
             <span className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">
-              {skillId ? "Skill Discussion Space" : "New Chat"}
+              Skill Discussion Space
             </span>
             <div className="bg-zinc-100 dark:bg-zinc-900 px-2 py-0.5 rounded text-[9px] font-bold text-zinc-500 dark:text-zinc-505 uppercase tracking-wide border border-zinc-200 dark:border-zinc-850">
               Intellex AI Assistant
@@ -284,7 +166,6 @@ export default function ChatPage() {
           </div>
           
           <div className="flex items-center space-x-3">
-            {/* Delete active chat button */}
             {activeChatId && (
               <button
                 onClick={async () => {
@@ -292,7 +173,7 @@ export default function ChatPage() {
                     try {
                       await deleteChatAction(activeChatId);
                       toast.success("Chat history deleted successfully.");
-                      setMessages([]);
+                      setAiMessages([]);
                       setActiveChatId(null);
                       setActiveCitations([]);
                       setContextLoaded(false);
@@ -308,7 +189,6 @@ export default function ChatPage() {
               </button>
             )}
 
-            {/* New Chat Reset Button */}
             <button
               onClick={handleNewChat}
               className="p-1.5 rounded-lg text-zinc-500 hover:text-zinc-850 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-900 border border-transparent hover:border-zinc-200 dark:hover:border-zinc-800 transition-all flex items-center gap-1 cursor-pointer"
@@ -317,7 +197,6 @@ export default function ChatPage() {
               <MessageSquarePlus className="w-4 h-4" />
             </button>
 
-            {/* Toggle context panel (visible on md screens to expand/collapse) */}
             <button
               onClick={() => setShowRightPanel(!showRightPanel)}
               className={cn(
@@ -333,7 +212,6 @@ export default function ChatPage() {
           </div>
         </header>
 
-        {/* Conversation messages area */}
         <div className="flex-1 overflow-y-auto p-6 pb-36 scrollbar-thin scrollbar-thumb-zinc-200 dark:scrollbar-thumb-zinc-800 scrollbar-track-transparent">
           {messages.length === 0 && !isThinking ? (
             <EmptyChatState onSuggestionClick={handleSendMessage} />
@@ -347,7 +225,6 @@ export default function ChatPage() {
           )}
         </div>
 
-        {/* Fixed Chat Input bar */}
         <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-slate-50 dark:from-zinc-950 via-slate-50/90 dark:via-zinc-950/90 to-transparent p-4 md:p-6 z-10">
           <div className="max-w-2xl mx-auto">
             <ChatInput
@@ -363,7 +240,6 @@ export default function ChatPage() {
         </div>
       </div>
 
-      {/* Right context sidebar */}
       <div className={cn(
         "hidden lg:block lg:w-[320px] lg:flex-shrink-0 h-full bg-zinc-50/20 dark:bg-zinc-955/10 z-10 transition-all duration-300 border-l border-zinc-200 dark:border-zinc-900",
         !showRightPanel && "lg:hidden lg:w-0 lg:border-l-0"
@@ -375,7 +251,6 @@ export default function ChatPage() {
         />
       </div>
 
-      {/* Floating Toggle trigger on Mobile */}
       {!showRightPanel && (
         <button
           onClick={() => setShowRightPanel(true)}
@@ -386,7 +261,6 @@ export default function ChatPage() {
         </button>
       )}
 
-      {/* Responsive mobile sidebar/drawer overlay if right panel is toggled */}
       {showRightPanel && (
         <div className="lg:hidden">
           <div 

@@ -275,7 +275,7 @@ export default function SkillCard({
               <Icons.Trash2 className="w-3.5 h-3.5" />
             </button>
             <button 
-              onClick={() => router.push(`/chats?skillId=${skill.id}`)}
+              onClick={() => router.push(`/chats/${skill.id}`)}
               className="flex items-center justify-center h-7 px-3.5 text-[10px] font-bold rounded-lg bg-zinc-50 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 hover:text-zinc-955 dark:hover:text-white border border-zinc-200 dark:border-zinc-800 hover:border-zinc-350 dark:hover:border-zinc-700 transition-all duration-200 cursor-pointer"
             >
               Open Space
@@ -383,7 +383,7 @@ export default function SkillCard({
           <Icons.Trash2 className="w-3.5 h-3.5" />
         </button>
         <button 
-          onClick={() => router.push(`/chats?skillId=${skill.id}`)}
+          onClick={() => router.push(`/chats/${skill.id}`)}
           className="flex items-center justify-center h-7 px-3 text-[10px] font-bold rounded-lg bg-zinc-50 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white border border-zinc-200 dark:border-zinc-800 hover:border-zinc-350 dark:hover:border-zinc-700 transition-all duration-200 cursor-pointer"
         >
           Open

@@ -19,7 +19,6 @@ import {
 } from "@/src/actions/skill.actions";
 import { uploadFileAction } from "@/src/actions/upload.actions";
 import { triggerIngestionAction } from "@/src/actions/ingestion.actions";
-import { triggerEmbeddingAction } from "@/src/actions/embedding.actions";
 
 export default function SkillsPage() {
   const [skills, setSkills] = useState<Skill[]>([]);
@@ -213,11 +212,8 @@ export default function SkillsPage() {
                 );
 
                 if (uploadRes.success && uploadRes.data) {
-                  // Ingest text content
                   const ingestRes = await triggerIngestionAction(uploadRes.data.id);
                   if (ingestRes.success) {
-                    // Generate vectors index
-                    await triggerEmbeddingAction(uploadRes.data.id, 50);
                     toast.success(`Knowledge file "${file.name}" indexed successfully!`);
                   } else {
                     toast.error(`Ingestion failed for "${file.name}": ${ingestRes.error}`);

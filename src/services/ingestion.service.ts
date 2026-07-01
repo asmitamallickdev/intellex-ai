@@ -1,3 +1,4 @@
+import crypto from "crypto";
 import prisma from "@/src/lib/prisma";
 import { r2Client, R2_BUCKET_NAME } from "../lib/r2";
 import { GetObjectCommand } from "@aws-sdk/client-s3";
@@ -7,6 +8,7 @@ import { chunkText } from "../lib/chunker";
 import { generateStorageKey } from "../lib/storage";
 import { Document, KnowledgeFileStatus } from "@prisma/client";
 import { IngestionConfig } from "../types/ingestion";
+import { openai, EMBEDDING_MODEL, EMBEDDING_DIMENSIONS } from "../lib/openai";
 
 // Global constant fallback DEV_USER_ID mapping
 export const DEV_USER_ID = "00000000-0000-0000-0000-000000000000";
@@ -72,6 +74,7 @@ export class IngestionService {
         const docShell = await prisma.document.create({
           data: {
             knowledgeFileId: fileId,
+            skillId: fileRecord.skillId,
             title: fileRecord.originalName,
             summary: "Document format is not indexable. OCR processing required.",
             pageCount: parsedResult.pageCount || 1,
@@ -95,7 +98,21 @@ export class IngestionService {
       const chunksData = chunkText(cleanedText, config.chunkSize, config.chunkOverlap);
       console.log(`[Ingestion Service] Created ${chunksData.length} chunks.`);
 
-      // 6. DB Transaction: Create Document & Chunks
+      // 6. Generate embeddings in batches
+      console.log(`[Ingestion Service] Generating embeddings for ${chunksData.length} chunks...`);
+      const allEmbeddings: number[][] = [];
+      for (let i = 0; i < chunksData.length; i += 50) {
+        const batch = chunksData.slice(i, i + 50);
+        const apiResponse = await openai.embeddings.create({
+          model: EMBEDDING_MODEL,
+          input: batch.map((c) => c.content),
+          dimensions: EMBEDDING_DIMENSIONS,
+        });
+        allEmbeddings.push(...apiResponse.data.map((d) => d.embedding));
+      }
+      console.log(`[Ingestion Service] Embeddings generated for ${allEmbeddings.length} chunks.`);
+
+      // 7. DB Transaction: Create Document & Chunks with embeddings
       console.log(`[Ingestion Service] Persisting Document and Chunks to Neon Database...`);
       
       const transactionResult = await prisma.$transaction(async (tx) => {
@@ -103,6 +120,7 @@ export class IngestionService {
         const document = await tx.document.create({
           data: {
             knowledgeFileId: fileId,
+            skillId: fileRecord.skillId,
             title: parsedResult.title || fileRecord.originalName,
             summary: "Summary will be generated during the embedding phase.",
             pageCount: parsedResult.pageCount || 1,
@@ -110,17 +128,28 @@ export class IngestionService {
           },
         });
 
-        // Batch insert Chunk rows
+        // Insert chunks with embeddings via raw SQL
         if (chunksData.length > 0) {
-          await tx.chunk.createMany({
-            data: chunksData.map((chk) => ({
-              documentId: document.id,
-              chunkIndex: chk.chunkIndex,
-              content: chk.content,
-              tokenCount: chk.tokenCount,
-              metadata: {},
-            })),
-          });
+          for (let i = 0; i < chunksData.length; i++) {
+            const chk = chunksData[i];
+            const vectorStr = `[${allEmbeddings[i].join(",")}]`;
+            await tx.$executeRawUnsafe(
+              `INSERT INTO chunks (id, "documentId", "skillId", "chunkIndex", content,
+                                   "tokenCount", metadata, embedding, "embeddingStatus",
+                                   "embeddingModel", "embeddingDimensions", "embeddedAt", "createdAt")
+               VALUES ($1::uuid, $2::uuid, $3::uuid, $4, $5, $6, '{}'::jsonb,
+                       $7::vector, 'COMPLETED', $8, $9, NOW(), NOW())`,
+              crypto.randomUUID(),
+              document.id,
+              fileRecord.skillId,
+              chk.chunkIndex,
+              chk.content,
+              chk.tokenCount,
+              vectorStr,
+              EMBEDDING_MODEL,
+              EMBEDDING_DIMENSIONS
+            );
+          }
         }
 
         // Update KnowledgeFile status to READY

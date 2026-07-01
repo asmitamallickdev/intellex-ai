@@ -31,10 +31,11 @@ export default function Sidebar({ onItemClick }: SidebarProps) {
 
   const handleNewChatClick = () => {
     if (onItemClick) onItemClick();
-    if (pathname === "/chats") {
+    const chatMatch = pathname.match(/^\/chats\/(.+)$/);
+    if (chatMatch) {
       window.dispatchEvent(new Event("new-chat"));
     } else {
-      router.push("/chats");
+      router.push("/skills");
     }
   };
 

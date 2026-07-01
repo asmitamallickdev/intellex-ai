@@ -91,6 +91,8 @@ model Skill {
   knowledgeFiles KnowledgeFile[]
   chats          Chat[]
   memories       Memory[]
+  documents      Document[]
+  chunks         Chunk[]
 
   @@index([userId])
   @@index([createdAt])
@@ -124,6 +126,7 @@ model KnowledgeFile {
 model Document {
   id              String   @id @default(uuid()) @db.Uuid
   knowledgeFileId String   @unique @db.Uuid
+  skillId         String   @db.Uuid
   title           String
   summary         String?  @db.Text
   pageCount       Int?
@@ -132,9 +135,11 @@ model Document {
   updatedAt       DateTime @updatedAt
 
   knowledgeFile KnowledgeFile @relation(fields: [knowledgeFileId], references: [id], onDelete: Cascade)
+  skill         Skill         @relation(fields: [skillId], references: [id], onDelete: Cascade)
   chunks        Chunk[]
 
   @@index([knowledgeFileId])
+  @@index([skillId])
   @@index([createdAt])
   @@map("documents")
 }
@@ -143,6 +148,7 @@ model Document {
 model Chunk {
   id                  String    @id @default(uuid()) @db.Uuid
   documentId          String    @db.Uuid
+  skillId             String    @db.Uuid
   chunkIndex          Int
   content             String    @db.Text
   tokenCount          Int
@@ -157,8 +163,10 @@ model Chunk {
   createdAt           DateTime  @default(now())
 
   document Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  skill    Skill    @relation(fields: [skillId], references: [id], onDelete: Cascade)
 
   @@index([documentId])
+  @@index([skillId])
   @@index([embeddingStatus])
   @@index([createdAt])
   @@map("chunks")

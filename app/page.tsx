@@ -34,7 +34,7 @@ export default function Home() {
               iconName="Upload"
             />
           </Link>
-          <Link href="/chats" className="block cursor-pointer">
+          <Link href="/skills" className="block cursor-pointer">
             <QuickActionCard
               title="New Chat"
               subtitle="Start AI discussion session"

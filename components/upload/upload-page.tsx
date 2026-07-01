@@ -140,7 +140,7 @@ export default function UploadPage() {
             // Synchronously run text extraction, parsing, and paragraph chunking
             const ingestRes = await triggerIngestionAction(res.data.id);
             if (ingestRes.success) {
-              toast.success(`Successfully ingested and indexed "${file.name}"!`);
+              toast.success(`Successfully indexed and embedded "${file.name}"!`);
               setFiles((prev) =>
                 prev.map((f) => (f.id === res.data!.id ? { ...f, status: "Completed", progress: 100 } : f))
               );
