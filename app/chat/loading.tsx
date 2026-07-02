@@ -12,7 +12,7 @@ export default function Loading() {
       </div>
       <div className="space-y-1 text-center">
         <p className="text-[10px] text-gray-500 dark:text-gray-300 font-bold uppercase tracking-widest">
-          Loading Secure Chats...
+          Opening workspace...
         </p>
       </div>
     </div>

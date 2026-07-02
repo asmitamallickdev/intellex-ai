@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
+import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
 import SkillsHeader from "./skills-header";
 import SkillsControls from "./skills-controls";
 import PinnedSkills from "./pinned-skills";
@@ -21,8 +23,10 @@ import { uploadFileAction } from "@/src/actions/upload.actions";
 import { triggerIngestionAction } from "@/src/actions/ingestion.actions";
 
 export default function SkillsPage() {
+  const router = useRouter();
   const [skills, setSkills] = useState<Skill[]>([]);
   const [loading, setLoading] = useState(true);
+  const [navigating, setNavigating] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [filterBy, setFilterBy] = useState<"All" | "Recently Updated" | "Most Documents" | "Most Chats" | "Pinned">("All");
   const [sortBy, setSortBy] = useState<"Name" | "Last Updated" | "Created Date">("Name");
@@ -240,6 +244,11 @@ export default function SkillsPage() {
     }
   };
 
+  const handleOpen = (id: string) => {
+    setNavigating(true);
+    router.push(`/chat/${id}`);
+  };
+
   // 1. Filter Logic
   const filteredSkills = useMemo(() => {
     return skills.filter((skill) => {
@@ -328,7 +337,21 @@ export default function SkillsPage() {
   }
 
   return (
-    <div className="space-y-6 md:space-y-8">
+    <>
+      {navigating && (
+        <div className="fixed inset-0 z-50 flex h-screen w-screen flex-col items-center justify-center bg-slate-50/80 dark:bg-gray-950/90 backdrop-blur-sm gap-4 select-none">
+          <div className="relative flex items-center justify-center">
+            <div className="absolute w-16 h-16 rounded-full bg-orange-500/20 blur-xl animate-pulse" />
+            <Loader2 className="w-10 h-10 text-orange-600 dark:text-orange-400 animate-spin relative z-10" />
+          </div>
+          <div className="space-y-1 text-center">
+            <p className="text-[10px] text-gray-500 dark:text-gray-300 font-bold uppercase tracking-widest">
+              Opening workspace...
+            </p>
+          </div>
+        </div>
+      )}
+      <div className="space-y-6 md:space-y-8">
       {/* Header */}
       <SkillsHeader onCreateClick={() => setCreateModalOpen(true)} />
 
@@ -361,6 +384,7 @@ export default function SkillsPage() {
         onDuplicate={handleDuplicate}
         onRename={handleRename}
         onCreateClick={() => setCreateModalOpen(true)}
+        onOpen={handleOpen}
       />
 
       {/* Create Skill Modal Dialog */}
@@ -371,5 +395,6 @@ export default function SkillsPage() {
         />
       )}
     </div>
+    </>
   );
 }

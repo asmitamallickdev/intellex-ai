@@ -5,8 +5,6 @@ import * as Icons from "lucide-react";
 import { Skill } from "@/lib/skills-mock-data";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
-import { useRouter } from "next/navigation";
-
 interface SkillCardProps {
   skill: Skill;
   layoutMode: "grid" | "list";
@@ -14,6 +12,7 @@ interface SkillCardProps {
   onDelete: (id: string) => void;
   onDuplicate: (id: string) => void;
   onRename: (id: string, newName: string) => void;
+  onOpen: (id: string) => void;
 }
 
 const colorMap: Record<string, { bg: string; text: string; border: string; borderHover: string; glow: string; textDark: string }> = {
@@ -38,8 +37,8 @@ export default function SkillCard({
   onDelete,
   onDuplicate,
   onRename,
+  onOpen,
 }: SkillCardProps) {
-  const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const [isRenaming, setIsRenaming] = useState(false);
   const [renameValue, setRenameValue] = useState(skill.name);
@@ -275,7 +274,7 @@ export default function SkillCard({
               <Icons.Trash2 className="w-3.5 h-3.5" />
             </button>
             <button 
-              onClick={() => router.push(`/chat/${skill.id}`)}
+              onClick={() => onOpen(skill.id)}
               className="flex items-center justify-center h-7 px-3.5 text-[10px] font-bold rounded-lg bg-gray-50 dark:bg-gray-900 text-gray-700 dark:text-gray-300 hover:text-gray-950 dark:hover:text-white border border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 transition-all duration-200 cursor-pointer"
             >
               Open Space
@@ -383,7 +382,7 @@ export default function SkillCard({
           <Icons.Trash2 className="w-3.5 h-3.5" />
         </button>
         <button 
-          onClick={() => router.push(`/chat/${skill.id}`)}
+          onClick={() => onOpen(skill.id)}
           className="flex items-center justify-center h-7 px-3 text-[10px] font-bold rounded-lg bg-gray-50 dark:bg-gray-900 text-gray-700 dark:text-gray-300 hover:text-gray-950 dark:hover:text-white border border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 transition-all duration-200 cursor-pointer"
         >
           Open

@@ -14,6 +14,7 @@ interface SkillGridProps {
   onDuplicate: (id: string) => void;
   onRename: (id: string, newName: string) => void;
   onCreateClick: () => void;
+  onOpen: (id: string) => void;
 }
 
 export default function SkillGrid({
@@ -24,6 +25,7 @@ export default function SkillGrid({
   onDuplicate,
   onRename,
   onCreateClick,
+  onOpen,
 }: SkillGridProps) {
   // Render empty state if there are no skills
   if (skills.length === 0) {
@@ -48,6 +50,7 @@ export default function SkillGrid({
           onDelete={onDelete}
           onDuplicate={onDuplicate}
           onRename={onRename}
+          onOpen={onOpen}
         />
       ))}
     </div>
