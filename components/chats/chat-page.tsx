@@ -8,7 +8,7 @@ import ChatInput from "./chat-input";
 import KnowledgeContextPanel from "./knowledge-context-panel";
 import { CitationSource } from "@/lib/chats-mock-data";
 import { toast } from "sonner";
-import { BookOpen, MessageSquarePlus, Trash2, PanelLeftOpen, PanelLeftClose } from "lucide-react";
+import { BookOpen, MessageSquarePlus, Trash2, PanelLeftOpen, PanelLeftClose, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
@@ -17,6 +17,9 @@ import {
   getChatMessagesAction, 
   deleteChatAction 
 } from "@/src/actions/chat.actions";
+import { uploadFileAction } from "@/src/actions/upload.actions";
+import { triggerIngestionAction } from "@/src/actions/ingestion.actions";
+import KnowledgeUploader from "@/components/skills/create-skill-modal/knowledge-uploader";
 
 export interface Message {
   id: string;
@@ -31,6 +34,9 @@ export default function ChatPage({ skillId, chatId }: { skillId: string; chatId:
   const [inputText, setInputText] = useState("");
   const [showRightPanel, setShowRightPanel] = useState(true);
   const [showChatHistory, setShowChatHistory] = useState(false);
+  const [showUploadModal, setShowUploadModal] = useState(false);
+  const [knowledgeRefreshKey, setKnowledgeRefreshKey] = useState(0);
+  const uploadsInProgress = useRef(0);
 
   const conversationEndRef = useRef<HTMLDivElement>(null);
 
@@ -114,6 +120,44 @@ export default function ChatPage({ skillId, chatId }: { skillId: string; chatId:
     setInputText("");
     sendMessage({ text: textToSend });
   }, [isStreaming, isThinking, sendMessage]);
+
+  const handleFileUpload = async (file: File) => {
+    uploadsInProgress.current++;
+    const toastId = toast.loading(`Uploading "${file.name}"...`);
+
+    try {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      await new Promise<void>((resolve, reject) => {
+        reader.onload = () => resolve();
+        reader.onerror = () => reject(new Error("Failed to read file"));
+      });
+
+      const base64Data = (reader.result as string).split(",")[1];
+      const uploadRes = await uploadFileAction(
+        skillId,
+        file.name,
+        file.type || "application/octet-stream",
+        file.size,
+        base64Data
+      );
+
+      if (!uploadRes.success || !uploadRes.data) throw new Error(uploadRes.error || "Upload failed");
+
+      const ingestRes = await triggerIngestionAction(uploadRes.data.id);
+      if (!ingestRes.success) throw new Error(ingestRes.error);
+
+      setKnowledgeRefreshKey((k) => k + 1);
+      toast.success(`"${file.name}" uploaded & indexed`, { id: toastId });
+    } catch (err: any) {
+      toast.error(`"${file.name}": ${err.message}`, { id: toastId });
+    } finally {
+      uploadsInProgress.current--;
+      if (uploadsInProgress.current <= 0) {
+        setShowUploadModal(false);
+      }
+    }
+  };
 
   const handleRegenerate = useCallback((id: string) => {
     regenerate({ messageId: id });
@@ -248,6 +292,7 @@ export default function ChatPage({ skillId, chatId }: { skillId: string; chatId:
               onChange={setInputText}
               onSend={handleSendMessage}
               isSendDisabled={isStreaming || isThinking}
+              onAttachClick={() => setShowUploadModal(true)}
             />
             <p className="text-center text-[9px] text-gray-400 dark:text-gray-600 font-medium tracking-wide uppercase mt-2.5">
               Intellex AI Enterprise v2.4 � AI can make mistakes. Verify important info.
@@ -262,6 +307,7 @@ export default function ChatPage({ skillId, chatId }: { skillId: string; chatId:
       )}>
         <KnowledgeContextPanel
           skillId={skillId}
+          refreshKey={knowledgeRefreshKey}
         />
       </div>
 
@@ -294,8 +340,32 @@ export default function ChatPage({ skillId, chatId }: { skillId: string; chatId:
             <div className="flex-1 overflow-y-auto">
               <KnowledgeContextPanel
                 skillId={skillId}
+                refreshKey={knowledgeRefreshKey}
               />
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Upload Knowledge Modal */}
+      {showUploadModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+          <div className="bg-white dark:bg-gray-950 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-2xl p-6 w-full max-w-md mx-4">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                Upload Knowledge
+              </h3>
+              <button
+                onClick={() => setShowUploadModal(false)}
+                className="p-1.5 rounded-lg text-gray-500 hover:text-gray-800 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <KnowledgeUploader
+              onFileAdd={handleFileUpload}
+              onError={(msg) => toast.error(msg)}
+            />
           </div>
         </div>
       )}

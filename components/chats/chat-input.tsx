@@ -10,6 +10,7 @@ interface ChatInputProps {
   onChange: (val: string) => void;
   onSend: (text: string) => void;
   isSendDisabled: boolean;
+  onAttachClick?: () => void;
 }
 
 export default function ChatInput({
@@ -17,6 +18,7 @@ export default function ChatInput({
   onChange,
   onSend,
   isSendDisabled,
+  onAttachClick,
 }: ChatInputProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -44,7 +46,7 @@ export default function ChatInput({
   };
 
   const handleAttachClick = () => {
-    toast.info("Staging attachment to conversation...");
+    onAttachClick?.();
   };
 
   const handleKnowledgeClick = () => {

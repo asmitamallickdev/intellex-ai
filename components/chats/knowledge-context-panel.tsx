@@ -9,6 +9,7 @@ import type { KnowledgeFile } from "@prisma/client";
 
 interface KnowledgeContextPanelProps {
   skillId: string;
+  refreshKey?: number;
 }
 
 const fileTypeIcons: Record<string, string> = {
@@ -27,6 +28,7 @@ const fileTypeIcons: Record<string, string> = {
 
 export default function KnowledgeContextPanel({
   skillId,
+  refreshKey,
 }: KnowledgeContextPanelProps) {
   const [files, setFiles] = useState<KnowledgeFile[]>([]);
   const [loading, setLoading] = useState(true);
@@ -51,7 +53,7 @@ export default function KnowledgeContextPanel({
 
     loadFiles();
     return () => { cancelled = true; };
-  }, [skillId]);
+  }, [skillId, refreshKey]);
 
   function getExtension(filename: string): string {
     const ext = filename.split(".").pop()?.toLowerCase() || "";
