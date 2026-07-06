@@ -77,6 +77,15 @@ export class ChatService {
   }
 
   /**
+   * Retrieves the count of all chat sessions for the developer user.
+   */
+  static async getChatsCount(): Promise<number> {
+    return prisma.chat.count({
+      where: { userId: DEV_USER_ID },
+    });
+  }
+
+  /**
    * Renames a chat thread title.
    */
   static async renameChat(id: string, title: string): Promise<Chat> {

@@ -24,6 +24,15 @@ export class MemoryService {
   }
 
   /**
+   * Retrieves the count of all long-term memory nodes.
+   */
+  static async getMemoriesCount(): Promise<number> {
+    return prisma.memory.count({
+      where: { userId: DEV_USER_ID },
+    });
+  }
+
+  /**
    * Creates a new long-term memory record manually.
    */
   static async createMemory(input: CreateMemoryInput): Promise<Memory> {

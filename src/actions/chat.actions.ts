@@ -148,3 +148,16 @@ export async function getChatsBySkillAction(skillId: string): Promise<ChatRespon
     return { success: false, error: err.message || "Internal server error.", statusCode: 500 };
   }
 }
+
+/**
+ * Server Action: Retrieves the count of all active chats.
+ */
+export async function getChatsCountAction(): Promise<ChatResponse<number>> {
+  try {
+    const count = await ChatService.getChatsCount();
+    return { success: true, data: count, statusCode: 200 };
+  } catch (err: any) {
+    console.error("[Chat Actions] Failed to fetch chats count:", err);
+    return { success: false, error: err.message || "Internal server error.", statusCode: 500 };
+  }
+}

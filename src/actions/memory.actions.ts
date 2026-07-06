@@ -119,3 +119,16 @@ export async function extractAndSaveMemoriesAction(
     return { success: false, error: err.message || "Internal server error.", statusCode: 500 };
   }
 }
+
+/**
+ * Server Action: Retrieves the count of all extracted memory nodes.
+ */
+export async function getMemoriesCountAction(): Promise<MemoryResponse<number>> {
+  try {
+    const count = await MemoryService.getMemoriesCount();
+    return { success: true, data: count, statusCode: 200 };
+  } catch (err: any) {
+    console.error("[Memory Actions] Failed to fetch memories count:", err);
+    return { success: false, error: err.message || "Internal server error.", statusCode: 500 };
+  }
+}
