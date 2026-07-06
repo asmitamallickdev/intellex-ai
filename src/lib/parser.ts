@@ -34,17 +34,18 @@ export async function parseDocument(
       break;
 
     case "pdf":
-      try {
-        const { PDFParse } = require("pdf-parse");
-        const parser = new PDFParse({ data: buffer });
-        const pdfData = await parser.getText();
-        result.text = pdfData.text || "";
-        result.pageCount = typeof pdfData.total === "number" ? pdfData.total : (pdfData.pages?.length || 0);
-      } catch (err: any) {
-        console.error(`[Parser] Error reading PDF:`, err);
-        throw new Error(`Failed to parse PDF document: ${err.message}`);
-      }
-      break;
+  try {
+    const pdf = require("pdf-parse");
+
+    const data = await pdf(buffer);
+
+    result.text = data.text ?? "";
+    result.pageCount = data.numpages ?? 1;
+  } catch (err: any) {
+    console.error("[Parser] Error reading PDF:", err);
+    throw new Error(`Failed to parse PDF: ${err.message}`);
+  }
+  break;
 
     case "docx":
       try {
