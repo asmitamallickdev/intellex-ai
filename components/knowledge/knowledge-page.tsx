@@ -76,6 +76,7 @@ export default function KnowledgePage() {
               return {
                 id: file.id,
                 name: file.originalName,
+                type: file.extension || "bin",
                 size: sizeStr,
                 uploadedAt: new Date(file.uploadedAt).toLocaleDateString(),
                 status,

@@ -12,14 +12,15 @@ import { getAllSkillsAction } from "@/src/actions/skill.actions";
 import { getAllFilesAction } from "@/src/actions/upload.actions";
 import { getChatsCountAction } from "@/src/actions/chat.actions";
 import { getMemoriesCountAction } from "@/src/actions/memory.actions";
+import { StatItem } from "@/lib/mock-data";
 
 export default function Home() {
-  const [stats, setStats] = useState([
-    { id: "skills", label: "Total Skills", value: "0", trend: "+0%", trendType: "stable" as const, iconName: "Library" },
-    { id: "files", label: "Indexed Files", value: "0", trend: "+0%", trendType: "stable" as const, iconName: "FileText" },
-    { id: "chats", label: "Active Chats", value: "0", trend: "+0%", trendType: "stable" as const, iconName: "MessageSquare" },
-    { id: "memories", label: "Memory Nodes", value: "0", trend: "+0%", trendType: "stable" as const, iconName: "Brain" },
-    { id: "capacity", label: "Storage Used", value: "0 KB", trend: "100MB Limit", trendType: "neutral" as const, iconName: "HardDrive" },
+  const [stats, setStats] = useState<StatItem[]>([
+    { id: "skills", label: "Total Skills", value: "0", trend: "+0%", trendType: "stable", iconName: "Library" },
+    { id: "files", label: "Indexed Files", value: "0", trend: "+0%", trendType: "stable", iconName: "FileText" },
+    { id: "chats", label: "Active Chats", value: "0", trend: "+0%", trendType: "stable", iconName: "MessageSquare" },
+    { id: "memories", label: "Memory Nodes", value: "0", trend: "+0%", trendType: "stable", iconName: "Brain" },
+    { id: "capacity", label: "Storage Used", value: "0 KB", trend: "100MB Limit", trendType: "neutral", iconName: "HardDrive" },
   ]);
 
   useEffect(() => {
