@@ -22,7 +22,7 @@ export default function WelcomeCard() {
             transition={{ duration: 0.4 }}
             className="text-2xl md:text-3xl lg:text-4xl font-semibold tracking-tight text-gray-900 dark:text-white"
           >
-            Good morning, Alex.
+            Good morning!
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 10 }}

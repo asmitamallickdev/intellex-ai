@@ -63,7 +63,7 @@ export default function UploadPage() {
       status,
       progress: dbFile.status === "READY" ? 100 : 50,
       category,
-      owner: "Alex Chen",
+      owner: "User",
     };
   };
 

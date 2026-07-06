@@ -13,7 +13,7 @@ export const authOptions: NextAuthOptions = {
         // Placeholder authorize implementation
         // Database queries and bcrypt validation will go here
         if (credentials?.email && credentials?.password) {
-          return { id: "1", name: "Alex Chen", email: credentials.email, role: "ENTERPRISE_MEMBER" };
+          return { id: "1", name: "User", email: credentials.email, role: "ENTERPRISE_MEMBER" };
         }
         return null;
       }

@@ -164,7 +164,7 @@ export default function Sidebar({ onItemClick }: SidebarProps) {
             
             <div className="flex flex-col">
               <span className="text-xs font-semibold text-gray-800 dark:text-gray-200 tracking-tight group-hover:text-gray-950 dark:group-hover:text-white transition-colors duration-150">
-                Alex Chen
+                User
               </span>
               <span className="text-[10px] font-medium text-gray-600 dark:text-gray-500 dark:text-gray-400 tracking-wide">
                 Enterprise Pro

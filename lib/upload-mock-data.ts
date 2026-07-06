@@ -22,7 +22,7 @@ export const mockUploadedFiles: UploadedFile[] = [
     status: "Completed",
     progress: 100,
     category: "Documents",
-    owner: "Alex Chen",
+    owner: "User",
   },
   {
     id: "file-2",
@@ -34,7 +34,7 @@ export const mockUploadedFiles: UploadedFile[] = [
     status: "Embedding",
     progress: 45,
     category: "Documents",
-    owner: "Alex Chen",
+    owner: "User",
   },
   {
     id: "file-3",
@@ -46,7 +46,7 @@ export const mockUploadedFiles: UploadedFile[] = [
     status: "Processing",
     progress: 75,
     category: "Data",
-    owner: "Alex Chen",
+    owner: "User",
   },
   {
     id: "file-4",
@@ -58,7 +58,7 @@ export const mockUploadedFiles: UploadedFile[] = [
     status: "Completed",
     progress: 100,
     category: "Documents",
-    owner: "Alex Chen",
+    owner: "User",
   },
   {
     id: "file-5",
@@ -70,7 +70,7 @@ export const mockUploadedFiles: UploadedFile[] = [
     status: "Completed",
     progress: 100,
     category: "Documents",
-    owner: "Alex Chen",
+    owner: "User",
   },
   {
     id: "file-6",
@@ -82,7 +82,7 @@ export const mockUploadedFiles: UploadedFile[] = [
     status: "Queued",
     progress: 0,
     category: "Data",
-    owner: "Alex Chen",
+    owner: "User",
   },
   {
     id: "file-7",
@@ -94,6 +94,6 @@ export const mockUploadedFiles: UploadedFile[] = [
     status: "Completed",
     progress: 100,
     category: "Images",
-    owner: "Alex Chen",
+    owner: "User",
   },
 ];

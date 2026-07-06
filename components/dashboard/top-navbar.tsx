@@ -146,7 +146,7 @@ export default function TopNavbar({ onMenuToggle }: TopNavbarProps) {
             <User className="h-3.5 w-3.5 text-gray-500 dark:text-gray-400" />
           </div>
           <span className="hidden lg:inline text-xs font-medium text-gray-700 dark:text-gray-300">
-            Alex Chen
+            User
           </span>
         </div>
       </div>
